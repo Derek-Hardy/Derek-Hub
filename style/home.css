@@ -7,12 +7,20 @@ body {
     margin-top: 8%;
     margin-left: 8%;
     font-family: 'Nunito', sans-serif;
+
+    display: -webkit-flex; /* Safari */
     display: flex;
 }
 
+.info-panel {
+    flex: 1;
+    min-width: 650px;
+}
+
 .nav-panel {
-    margin-left: 8%;
+
     font-size: 20px;
+    flex: 0 0 65%;
 }
 
 .nav-link {
@@ -24,7 +32,7 @@ body {
     margin-bottom: 10%;
 }
 
-.exp-list {
+.heading {
     margin-bottom: 6%;
 }
 
