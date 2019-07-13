@@ -12,13 +12,8 @@ body {
     display: flex;
 }
 
-.info-panel {
-    flex: 1;
-    min-width: 650px;
-}
-
 .nav-panel {
-
+    margin-left: 6%;
     font-size: 20px;
     flex: 0 0 65%;
 }
