@@ -36,3 +36,12 @@ body {
 p {
     width: 600px; /* Main essay section width */
 }
+
+#pangle {
+    border: none;
+}
+
+#pangle-logo {
+    border-radius: 6px;
+    height: 16px;
+}
