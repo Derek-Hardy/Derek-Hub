@@ -37,11 +37,11 @@ p {
     width: 600px; /* Main essay section width */
 }
 
-#pangle {
+.pangle {
     border: none;
 }
 
-#pangle-logo {
+.pangle-logo {
     border-radius: 6px;
     height: 16px;
 }
