@@ -1,0 +1,48 @@
+baseURL: "https://derek-hardy.github.io"
+title: Derek's Hub
+copyright: "© [PaperMod Contributors](https://github.com/adityatelange/hugo-PaperMod/graphs/contributors)"
+pagination:
+  pagerSize: 5
+theme: [paper-mod]
+
+enableRobotsTXT: true
+enableEmoji: true
+
+minify:
+  disableXML: true
+
+params:
+  ShowBreadCrumbs: true
+
+  homeInfoParams:
+    Title: Hi there 👋 !
+    Content: |
+      * My name is Derek, I work at **Goldman Sachs** as a software engineer, living in Singapore 🇸🇬
+      
+      * 
+      
+      * My current project specialises in enterprise-grade distributed scheduling platform that manages around 2 million firm-wide job executions daily
+      
+      *
+      
+      * I frequently travel to Hong Kong 🇭🇰 and Shenzhen 🇨🇳 as well to visit my family and friends :)
+
+  socialIcons:
+    - name: LinkedIn
+      title: View Profile on LinkedIn
+      url: "https://www.linkedin.com/in/derekzhuang/"
+    - name: GitHub
+      title: View Source on Github
+      url: "https://github.com/Derek-Hardy"
+
+  assets:
+    disableHLJS: true
+
+menu:
+  main:
+    - name: Posts
+      url: posts/
+      weight: 5
+    - name: About
+      url: about/
+      weight: 10
