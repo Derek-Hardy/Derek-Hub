@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on Derek&#39;s Hub</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on Derek&#39;s Hub</description>
+    <generator>Hugo -- 0.139.0</generator>
+    <language>en</language>
+    <copyright>PaperMod Contributors</copyright>
+    <lastBuildDate>Fri, 30 Jun 2023 12:17:04 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>YouTube channels I like for learning French</title>
+      <link>http://localhost:1313/posts/learning-french/</link>
+      <pubDate>Fri, 30 Jun 2023 12:17:04 +0800</pubDate>
+      <guid>http://localhost:1313/posts/learning-french/</guid>
+      <description>&lt;p&gt;In my third year at university, I got the chance to experience the French part of Switzerland for a semester through an exchange program
+at Ecole Polytechnique Federale de Lausanne (EPFL).&lt;/p&gt;
+&lt;p&gt;I thought knowing a bit of the language would definitely boost my experience there, so I decided to take a French module at my home university.&lt;/p&gt;
+&lt;p&gt;Well, I ended up loving it. There are a few channels that really helped me out with daily conversations.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>YouTube channels I like for learning German</title>
+      <link>http://localhost:1313/posts/learning-german/</link>
+      <pubDate>Mon, 19 Jun 2023 12:17:04 +0800</pubDate>
+      <guid>http://localhost:1313/posts/learning-german/</guid>
+      <description>&lt;p&gt;I took German as my first elective module back in my first year of university.&lt;/p&gt;
+&lt;p&gt;Honestly, I found it is a great opportunity to connect with people outside my faculty and from completely different cultural background.&lt;/p&gt;
+&lt;p&gt;And obviously I get to learn about German culture as well.&lt;/p&gt;
+&lt;p&gt;Again, I&amp;rsquo;m a practical person. I believe YouTube is a great place to get exposure to daily vocabulary, different accents and simply a real touch to local people.
+So here are some great channels that I enjoy immensely while learning the language.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
