@@ -13,6 +13,8 @@ minify:
 
 params:
   ShowBreadCrumbs: true
+  ShowReadingTime: true
+  ShowPostNavLinks: true
 
   homeInfoParams:
     Title: Hi there 👋 !
@@ -34,9 +36,6 @@ params:
     - name: GitHub
       title: View Source on Github
       url: "https://github.com/Derek-Hardy"
-
-  assets:
-    disableHLJS: true
 
 menu:
   main:
