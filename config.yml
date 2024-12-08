@@ -15,6 +15,7 @@ params:
   ShowBreadCrumbs: true
   ShowReadingTime: true
   ShowPostNavLinks: true
+  ShowToc: true
 
   homeInfoParams:
     Title: Hi there 👋 !

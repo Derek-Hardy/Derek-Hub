@@ -7,8 +7,18 @@
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Fri, 30 Jun 2023 12:17:04 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 21 Nov 2023 11:17:04 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Built-in functions in Go</title>
+      <link>http://localhost:1313/posts/go-built-in/</link>
+      <pubDate>Tue, 21 Nov 2023 11:17:04 +0800</pubDate>
+      <guid>http://localhost:1313/posts/go-built-in/</guid>
+      <description>&lt;p&gt;The builtins are functions in Golang that you can call directly &lt;em&gt;without having to import any package&lt;/em&gt;; they just come with the programming language itself.&lt;/p&gt;
+&lt;p&gt;The full list resides in the builtin standard library: &lt;code&gt;https://pkg.go.dev/builtin&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Many of the builtin functions are widely used, so it&amp;rsquo;s important to know them by heart.&lt;/p&gt;
+&lt;p&gt;The motivation for this post comes from the fact that &lt;code&gt;Go 1.21.0&lt;/code&gt; has introduced multiple new handy builtins (which doesn&amp;rsquo;t happen frequently).&lt;/p&gt;</description>
+    </item>
     <item>
       <title>YouTube channels I like for learning French</title>
       <link>http://localhost:1313/posts/learning-french/</link>
