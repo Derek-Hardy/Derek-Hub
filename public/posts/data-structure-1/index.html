@@ -5,11 +5,41 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Posts | Derek&#39;s Hub</title>
+<title>Data Structure in Go | Derek&#39;s Hub</title>
 <meta name="keywords" content="">
-<meta name="description" content="Posts - Derek&#39;s Hub">
+<meta name="description" content="Data structures start with the fundamental data types in Go:
+Numbers, String, Boolean, Array, Struct, Slice, Pointer
+Besides the basic ones in Go, there are alias types that just provide more meaningful names for existing data types.
+It&rsquo;s good to take note of them so as not to get lost when you stumble into them.
+
+  
+      
+          Alias type
+          Underlying type
+          Why?
+      
+  
+  
+      
+          rune
+          int32
+          represent a Unicode character
+      
+      
+          byte
+          uint8
+          represent one byte (8 bits) of data
+      
+      
+          int
+          int32 / int64
+          adjusted for the system (32 bit / 64 bit)
+      
+  
+
+We can also define custom alias type:">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/">
+<link rel="canonical" href="http://localhost:1313/posts/data-structure-1/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.d6fcd20a4fb86efa4dfac8ec95da60244cc8871042183da1ef28e3a762ad79c8.css" integrity="sha256-1vzSCk&#43;4bvpN&#43;sjsldpgJEzIhxBCGD2h7yjjp2Ktecg=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
@@ -18,8 +48,7 @@
 <link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/posts/index.xml">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/data-structure-1/">
 <noscript>
     <style>
         #theme-toggle,
@@ -59,7 +88,7 @@
 </noscript>
 </head>
 
-<body class="list" id="top">
+<body class="" id="top">
 <script>
     if (localStorage.getItem("pref-theme") === "dark") {
         document.body.classList.add('dark');
@@ -101,7 +130,7 @@
         <ul id="menu">
             <li>
                 <a href="http://localhost:1313/posts/" title="Posts">
-                    <span class="active">Posts</span>
+                    <span>Posts</span>
                 </a>
             </li>
             <li>
@@ -112,88 +141,67 @@
         </ul>
     </nav>
 </header>
-<main class="main"> 
-<header class="page-header"><div class="breadcrumbs"><a href="http://localhost:1313/">Home</a></div>
-  <h1>
-    Posts
-  </h1>
-</header>
+<main class="main">
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Data Structure in Go
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Data structures start with the fundamental data types in Go: Numbers, String, Boolean, Array, Struct, Slice, Pointer
-Besides the basic ones in Go, there are alias types that just provide more meaningful names for existing data types. It’s good to take note of them so as not to get lost when you stumble into them.
-Alias type Underlying type Why? rune int32 represent a Unicode character byte uint8 represent one byte (8 bits) of data int int32 / int64 adjusted for the system (32 bit / 64 bit) We can also define custom alias type:
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2024-12-12 20:28:17 +0800 +08'>December 12, 2024</span>&nbsp;·&nbsp;1 min</footer>
-  <a class="entry-link" aria-label="post link to Data Structure in Go" href="http://localhost:1313/posts/data-structure-1/"></a>
-</article>
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Data Structure in Go
+    </h1>
+    <div class="post-meta"><span title='2024-12-12 20:28:17 +0800 +08'>December 12, 2024</span>&nbsp;·&nbsp;1 min
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Common Go channel uses
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Go is known for its native support for concurrency. You can easily spin up a concurrent execution (i.e. goroutine) using keyword go.
-It is similar to OS thread but managed by Go runtime scheduler instead of OS kernel. The underlying implementation actually employs an M:N model to multiplex M goroutines onto N threads.
-With the great power of concurrency comes with the responsibility to handle synchronisation in the right manner.
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-12-01 11:17:04 +0800 +08'>December 1, 2023</span>&nbsp;·&nbsp;3 min</footer>
-  <a class="entry-link" aria-label="post link to Common Go channel uses" href="http://localhost:1313/posts/go-channel/"></a>
-</article>
+</div>
+  </header> 
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Built-in functions in Go
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>The builtins are functions in Golang that you can call directly without having to import any package; they just come with the programming language itself.
-The full list resides in the builtin standard library: https://pkg.go.dev/builtin
-Many of the builtin functions are widely used, so it’s important to know them by heart.
-The motivation for this post comes from the fact that Go 1.21.0 has introduced multiple new handy builtins (which doesn’t happen frequently).
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-11-29 11:17:04 +0800 +08'>November 29, 2023</span>&nbsp;·&nbsp;5 min</footer>
-  <a class="entry-link" aria-label="post link to Built-in functions in Go" href="http://localhost:1313/posts/go-built-in/"></a>
-</article>
+  <div class="post-content"><p>Data structures start with the fundamental data types in Go:
+<code>Numbers</code>, <code>String</code>, <code>Boolean</code>, <code>Array</code>, <code>Struct</code>, <code>Slice</code>, <code>Pointer</code></p>
+<p>Besides the basic ones in Go, there are alias types that just provide more meaningful names for existing data types.
+It&rsquo;s good to take note of them so as not to get lost when you stumble into them.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Alias type</th>
+          <th>Underlying type</th>
+          <th>Why?</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>rune</td>
+          <td>int32</td>
+          <td>represent a Unicode character</td>
+      </tr>
+      <tr>
+          <td>byte</td>
+          <td>uint8</td>
+          <td>represent one byte (8 bits) of data</td>
+      </tr>
+      <tr>
+          <td>int</td>
+          <td>int32 / int64</td>
+          <td>adjusted for the system (32 bit / 64 bit)</td>
+      </tr>
+  </tbody>
+</table>
+<p>We can also define custom alias type:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">MyNumber</span> <span style="color:#66d9ef">int32</span>
+</span></span></code></pre></div>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">YouTube channels I like for learning French
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>In my third year at university, I got the chance to experience the French part of Switzerland for a semester through an exchange program at Ecole Polytechnique Federale de Lausanne (EPFL).
-I thought knowing a bit of the language would definitely boost my experience there, so I decided to take a French module at my home university.
-Well, I ended up loving it. There are a few channels that really helped me out with daily conversations.
-...</p>
   </div>
-  <footer class="entry-footer"><span title='2023-06-30 12:17:04 +0800 +08'>June 30, 2023</span>&nbsp;·&nbsp;1 min</footer>
-  <a class="entry-link" aria-label="post link to YouTube channels I like for learning French" href="http://localhost:1313/posts/learning-french/"></a>
-</article>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">YouTube channels I like for learning German
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>I took German as my first elective module back in my first year of university.
-Honestly, I found it is a great opportunity to connect with people outside my faculty and from completely different cultural background.
-And obviously I get to learn about German culture as well.
-Again, I’m a practical person. I believe YouTube is a great place to get exposure to daily vocabulary, different accents and simply a real touch to local people. So here are some great channels that I enjoy immensely while learning the language.
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-06-19 12:17:04 +0800 +08'>June 19, 2023</span>&nbsp;·&nbsp;2 min</footer>
-  <a class="entry-link" aria-label="post link to YouTube channels I like for learning German" href="http://localhost:1313/posts/learning-german/"></a>
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://localhost:1313/posts/go-channel/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Common Go channel uses</span>
+  </a>
+</nav>
+
+  </footer>
 </article>
     </main>
     

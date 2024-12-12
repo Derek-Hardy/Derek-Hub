@@ -7,8 +7,45 @@
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Fri, 01 Dec 2023 11:17:04 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 12 Dec 2024 20:28:17 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Data Structure in Go</title>
+      <link>http://localhost:1313/posts/data-structure-1/</link>
+      <pubDate>Thu, 12 Dec 2024 20:28:17 +0800</pubDate>
+      <guid>http://localhost:1313/posts/data-structure-1/</guid>
+      <description>&lt;p&gt;Data structures start with the fundamental data types in Go:
+&lt;code&gt;Numbers&lt;/code&gt;, &lt;code&gt;String&lt;/code&gt;, &lt;code&gt;Boolean&lt;/code&gt;, &lt;code&gt;Array&lt;/code&gt;, &lt;code&gt;Struct&lt;/code&gt;, &lt;code&gt;Slice&lt;/code&gt;, &lt;code&gt;Pointer&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Besides the basic ones in Go, there are alias types that just provide more meaningful names for existing data types.
+It&amp;rsquo;s good to take note of them so as not to get lost when you stumble into them.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Alias type&lt;/th&gt;
+          &lt;th&gt;Underlying type&lt;/th&gt;
+          &lt;th&gt;Why?&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;rune&lt;/td&gt;
+          &lt;td&gt;int32&lt;/td&gt;
+          &lt;td&gt;represent a Unicode character&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;byte&lt;/td&gt;
+          &lt;td&gt;uint8&lt;/td&gt;
+          &lt;td&gt;represent one byte (8 bits) of data&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;int&lt;/td&gt;
+          &lt;td&gt;int32 / int64&lt;/td&gt;
+          &lt;td&gt;adjusted for the system (32 bit / 64 bit)&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;We can also define custom alias type:&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Common Go channel uses</title>
       <link>http://localhost:1313/posts/go-channel/</link>
