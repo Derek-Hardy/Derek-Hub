@@ -7,8 +7,17 @@
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Wed, 29 Nov 2023 11:17:04 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 01 Dec 2023 11:17:04 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Common Go channel uses</title>
+      <link>http://localhost:1313/posts/go-channel/</link>
+      <pubDate>Fri, 01 Dec 2023 11:17:04 +0800</pubDate>
+      <guid>http://localhost:1313/posts/go-channel/</guid>
+      <description>&lt;p&gt;Go is known for its native support for concurrency. You can easily spin up a concurrent execution (i.e. goroutine) using keyword &lt;code&gt;go&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;It is similar to OS thread but managed by Go runtime scheduler instead of OS kernel. The underlying implementation actually employs an M:N model to multiplex M goroutines onto N threads.&lt;/p&gt;
+&lt;p&gt;With the great power of concurrency comes with the responsibility to handle synchronisation in the right manner.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Built-in functions in Go</title>
       <link>http://localhost:1313/posts/go-built-in/</link>
