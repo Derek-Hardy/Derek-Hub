@@ -7,17 +7,18 @@
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Thu, 12 Dec 2024 20:28:17 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 05 Dec 2023 20:28:17 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Data Structure in Go</title>
+      <title>Data Structure in Go - Part 1</title>
       <link>http://localhost:1313/posts/data-structure-1/</link>
-      <pubDate>Thu, 12 Dec 2024 20:28:17 +0800</pubDate>
+      <pubDate>Tue, 05 Dec 2023 20:28:17 +0800</pubDate>
       <guid>http://localhost:1313/posts/data-structure-1/</guid>
-      <description>&lt;p&gt;Data structures start with the fundamental data types in Go:
-&lt;code&gt;Numbers&lt;/code&gt;, &lt;code&gt;String&lt;/code&gt;, &lt;code&gt;Boolean&lt;/code&gt;, &lt;code&gt;Array&lt;/code&gt;, &lt;code&gt;Struct&lt;/code&gt;, &lt;code&gt;Slice&lt;/code&gt;, &lt;code&gt;Pointer&lt;/code&gt;&lt;/p&gt;
+      <description>&lt;h3 id=&#34;alias-type&#34;&gt;Alias type&lt;/h3&gt;
+&lt;p&gt;Data structures start with the fundamental data types in Go:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Numbers&lt;/code&gt;, &lt;code&gt;String&lt;/code&gt;, &lt;code&gt;Boolean&lt;/code&gt;, &lt;code&gt;Array&lt;/code&gt;, &lt;code&gt;Struct&lt;/code&gt;, &lt;code&gt;Slice&lt;/code&gt;, &lt;code&gt;Pointer&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;Besides the basic ones in Go, there are alias types that just provide more meaningful names for existing data types.
-It&amp;rsquo;s good to take note of them so as not to get lost when you stumble into them.&lt;/p&gt;
+It&amp;rsquo;s good to be aware of them so as not to get confused when you happen to see them.&lt;/p&gt;
 &lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
