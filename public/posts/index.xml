@@ -7,8 +7,18 @@
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Tue, 05 Dec 2023 20:28:17 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 17 Dec 2023 15:02:58 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Data Structure in Go - Part 2</title>
+      <link>http://localhost:1313/posts/data-structure-2/</link>
+      <pubDate>Sun, 17 Dec 2023 15:02:58 +0800</pubDate>
+      <guid>http://localhost:1313/posts/data-structure-2/</guid>
+      <description>&lt;p&gt;It is true that Go is designed with a minimalistic touch. It does not have a rich set of collections or in-built data structures like Java,
+where you can just import &lt;code&gt;java.util.PriorityQueue&lt;/code&gt; or &lt;code&gt;java.util.Stack&lt;/code&gt; and start using them.&lt;/p&gt;
+&lt;p&gt;However, besides the basic &lt;code&gt;map&lt;/code&gt; and &lt;code&gt;slice&lt;/code&gt;, Go does come with a builtin &lt;code&gt;container&lt;/code&gt; package that we should at least be aware  and
+make use of it to implement things like &lt;code&gt;Stack&lt;/code&gt;, &lt;code&gt;Queue&lt;/code&gt;, &lt;code&gt;PriorityQueue&lt;/code&gt; and &lt;code&gt;Deque&lt;/code&gt;.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Data Structure in Go - Part 1</title>
       <link>http://localhost:1313/posts/data-structure-1/</link>
