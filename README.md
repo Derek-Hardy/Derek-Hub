@@ -1,14 +1,12 @@
-## This is Derek's personal home page
+## This is Derek's home page
 
-I am a software developer @ Goldman Sachs Singapore :singapore:
+I am a software developer @ Goldman Sachs :singapore:, building an ecosystem around distributed job scheduling platform 
+for batch workflows.
 
-I studied Computer Science at National University of Singapore and graduated with bachelor degree in 2021
+Previously I worked at ByteDance to make monetization easy and accessible to small and medium App developers globally 
+through Ad Network.
 
-### Some words
+I earned my bachelor degree in Computer Science @ National University of Singapore in 2021.
 
-This is my site to share about my professional experience and personal interests.
+This is my blog to share about my professional experience and personal interests.
 
-
-### Contact me
-
-LinkedIn: https://www.linkedin.com/in/derekzhuang/

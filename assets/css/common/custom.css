@@ -1,0 +1,5 @@
+.fixed-code {
+    display: block;
+    max-height: 360px;
+    overflow: scroll;
+}

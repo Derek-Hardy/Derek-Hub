@@ -18,25 +18,30 @@ params:
   ShowToc: true
 
   homeInfoParams:
-    Title: Hi there 👋 !
+    Title: Hi there 👋, @whoami
     Content: |
-      * My name is Derek, I work at **Goldman Sachs** as a software engineer, living in Singapore 🇸🇬
+      * My name is Derek, I am a software engineer at **Goldman Sachs**, living in Singapore as a permanent resident 🇸🇬
       
       * 
       
-      * My current project specialises in enterprise-grade distributed scheduling platform that manages around 2 million firm-wide job executions daily
+      * My current project specialises in a Raft-based, API-driven **distributed scheduling platform** for batch workflows (think of Apache Airflow) 
+       that takes care of around 30 million firmwide job executions daily
       
       *
       
-      * I frequently travel to Hong Kong 🇭🇰 and Shenzhen 🇨🇳 as well to visit my family and friends :)
+      * Previously, I worked on the infrastructure supporting global Ad Network at **ByteDance**, making App monetization easy and accessible to all developers globally (BTW, the platform is called **Pangle**)
+      
+      *
+      
+      * 👉 [**More about me**](../about/)
 
   socialIcons:
     - name: LinkedIn
       title: View Profile on LinkedIn
       url: "https://www.linkedin.com/in/derekzhuang/"
-    - name: GitHub
-      title: View Source on Github
-      url: "https://github.com/Derek-Hardy"
+    - name: Email
+      title: Reach me via Email
+      url: "mailto:derekzxj@outlook.com"
 
 menu:
   main:
