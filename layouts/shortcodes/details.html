@@ -1,0 +1,4 @@
+<details open>
+    <summary>{{ .Get "title" | default "Click to expand" | markdownify }}</summary>
+    <div class="fixed-code">{{ .Inner | markdownify }}</div>
+</details>

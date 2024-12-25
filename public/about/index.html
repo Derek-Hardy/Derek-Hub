@@ -8,13 +8,16 @@
 <title>Derek&#39;s Hub</title>
 <meta name="keywords" content="">
 <meta name="description" content="About me 🧑🏻‍💻
-I&rsquo;m Derek and I live in Singapore for the past 12 years.
-Right now I&rsquo;m a 3-year experienced software engineer at Goldman Sachs, focusing on distributed system and job scheduling platform (think of Apache Airflow).
-I also used to build and maintain high performing APIs in global advertising platform at TikTok called Pangle.
-Even before, I built stateful data processing pipeline with Apache Flink as part of the core user recommendation system at Tencent Ads.">
+I have been mostly hacking in Golang and Java, and appreciate both functional &amp; object-oriented programming paradigms to solve real world engineering problems.
+Right now I&rsquo;m a three-year experienced software engineer @ Goldman Sachs, focusing on building the firm&rsquo;s distributed scheduling platform for batch workflows.
+What is a scheduling platform?
+
+It is responsible for managing the dependency graphs among predefined jobs 
+and their executions at the specified time and on the specified compute resources.
+and then">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/about/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.d6fcd20a4fb86efa4dfac8ec95da60244cc8871042183da1ef28e3a762ad79c8.css" integrity="sha256-1vzSCk&#43;4bvpN&#43;sjsldpgJEzIhxBCGD2h7yjjp2Ktecg=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.31a038ca4fe29d231a9edae8087cf7ea016d84e6abeb8663f248bda38b0d511b.css" integrity="sha256-MaA4yk/inSMantroCHz36gFthOar64Zj8ki9o4sNURs=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
@@ -118,27 +121,250 @@ Even before, I built stateful data processing pipeline with Apache Flink as part
 </header>
 <main class="main"> 
 <div class="post-content"><h2 id="about-me-">About me 🧑🏻‍💻<a hidden class="anchor" aria-hidden="true" href="#about-me-">#</a></h2>
-<p>I&rsquo;m Derek and I live in Singapore for the past 12 years.</p>
-<p>Right now I&rsquo;m a 3-year experienced software engineer at <strong>Goldman Sachs</strong>, focusing on distributed system and job scheduling platform (think of <a href="https://airflow.apache.org/">Apache Airflow</a>).</p>
-<p>I also used to build and maintain high performing APIs in global advertising platform at TikTok called <a href="https://www.pangleglobal.com/">Pangle</a>.</p>
-<p>Even before, I built stateful data processing pipeline with <a href="https://flink.apache.org/">Apache Flink</a> as part of the core user recommendation system at Tencent Ads.</p>
-<p>I have been mostly hacking in <strong>Golang</strong> and Java, and appreciate both functional &amp; object-oriented programming paradigms to solve real world problems.</p>
+<p>I have been mostly hacking in <strong>Golang</strong> and <strong>Java</strong>, and appreciate both functional &amp; object-oriented programming paradigms to solve real world engineering problems.</p>
+<p>Right now I&rsquo;m a three-year experienced software engineer @ <strong>Goldman Sachs</strong>, focusing on building the firm&rsquo;s distributed scheduling platform for batch workflows.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>What is a scheduling platform?
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>It is responsible for managing the dependency graphs among predefined jobs 
+</span></span><span style="display:flex;"><span>and their executions at the specified time and on the specified compute resources.
+</span></span></code></pre></div><p>and then</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>What is batch workflow?
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>It is the execution of a series of tasks in a predefined sequence without 
+</span></span><span style="display:flex;"><span>manual intervention, which usually processes a large volume of data
+</span></span></code></pre></div><p>🤔 For example, a trading desk wants to start processing today&rsquo;s trading activities for some of their assets after the market close. They can set up:</p>
+<ul>
+<li><code>Job_A</code> that triggers the post-trade application to start at 4:00pm local time to reconcile and generate transaction reports; or it can be individual job <code>Job_A1</code>, <code>Job_A2</code>, <code>Job_A3</code> for each asset class</li>
+<li><code>Job_B</code> that depends on all <code>Job_A1</code>, <code>Job_A2</code>, <code>Job_A3</code> to complete, before it starts aggregating all reports into central statistics</li>
+<li><code>Job_C</code> that starts after <code>Job_B</code>&rsquo;s completion to generate and submit regulatory reporting</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>The dependency graph:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>4:00pm EST ⏰
+</span></span><span style="display:flex;"><span>           | Job_A1 ————\
+</span></span><span style="display:flex;"><span>           | Job_A2 —————&gt; Job_B ——&gt; Job_C ——&gt; done!
+</span></span><span style="display:flex;"><span>           | Job_A3 ————/
+</span></span></code></pre></div><p>When realised that this workflow might be the same for tomorrow as well, you can set up recurrence for it on the platform using
+<strong>cron</strong> feature based on your custom schedule (e.g. trigger the above workflow every weekday, excluding bank holidays).</p>
+<p>Of course, this is a simple example to illustrate the idea. There are more demanding scheduling requirements that the team is actively working on,
+including but not limited to:</p>
+<ul>
+<li>what if the job generates huge amount of logs that put pressures on the allocated host;</li>
+<li>how to optimise for throughput if there are 100 thousand of such <code>Job_A1</code>&hellip;<code>Job_A100000</code>need to launch at the same time;</li>
+<li>noisy neighbour problem when jobs interfere with each other on the shared host resource</li>
+</ul>
 <hr>
-<p>Flash back further to the past, I studied Computer Science at <strong>National University of Singapore</strong>, from 2017 to 2021, and received my bachelor degree there.</p>
-<p>Even until now, I liked my choice and enjoyed my diverse experiences in that 4 years, including but not limited to:</p>
-<blockquote>
-<p>1 - Cool software engineer internship at Tencent headquarter in Shenzhen</p>
-<p>I met a great mentor and fellow interns. More importantly, the work assures me that I like things hands-on and building a career in software is the way to go for me.</p>
-</blockquote>
-<blockquote>
-<p>2 - Exchange study at EPFL in Lausanne, Switzerland in my third year</p>
-<p>It was an incredible semester focusing on coding and research topics in Machine Learning alongside the quiet Lake Leman.</p>
-</blockquote>
-<blockquote>
-<p>3 - Software engineer internship at content delivery team in Goldman Sachs</p>
-<p>This was my very first hands-on experience with distributed system. I found it is one of those intriguing problem spaces to explore.</p>
-</blockquote>
-<p>Didn&rsquo;t really consider a master degree right now, because I felt I&rsquo;m already surrounded by many interesting CS problems in my day-to-day work that are worth spending time to focus on.</p>
+<p>Earlier on, I used Golang &amp; Gin HTTP framework quite extensively to build and optimise REST APIs for the Ad Network infrastructure @ <strong>ByteDance</strong>.</p>
+<p>There is a lot of work involved to communicate and coordinate with different teams around the world to make Ads delivery effective:</p>
+<ul>
+<li>need <strong>geolocation</strong> targeting support to recommend right contents for the right region</li>
+<li>need to collect signals from the request context for <strong>machine learning</strong> model to produce more accurate personalisation</li>
+<li>need to infer user profile from the request context in order to make ads delivery compliant with local regulations</li>
+</ul>
+<p>All happen within one HTTP round trip under 1 second organised behind the scene as a directed acyclic graph.</p>
+<p><details open>
+    <summary>How does an OpenRTB request context (<code>POST payload</code>) look like:</summary>
+    <div class="fixed-code"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;YjqJLwAOHaAFwkGeqAj3Kg&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;imp&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;1&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;video&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;mimes&#34;</span>: [
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#34;video/mp4&#34;</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;maxduration&#34;</span>: <span style="color:#ae81ff">600</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;w&#34;</span>: <span style="color:#ae81ff">360</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;h&#34;</span>: <span style="color:#ae81ff">640</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;startdelay&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;playbackmethod&#34;</span>: [
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;pos&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;api&#34;</span>: [
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;protocols&#34;</span>: [
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;skip&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;placement&#34;</span>: <span style="color:#ae81ff">5</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;playbackend&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;displaymanager&#34;</span>: <span style="color:#e6db74">&#34;GOOGLE&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;instl&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;bidfloor&#34;</span>: <span style="color:#ae81ff">0.01</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;bidfloorcur&#34;</span>: <span style="color:#e6db74">&#34;USD&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metric&#34;</span>: [
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;click_through_rate&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#ae81ff">0.228</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;vendor&#34;</span>: <span style="color:#e6db74">&#34;EXCHANGE&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;video_completion_rate&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#ae81ff">0.845</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;vendor&#34;</span>: <span style="color:#e6db74">&#34;EXCHANGE&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;viewability&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#ae81ff">0.930</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;vendor&#34;</span>: <span style="color:#e6db74">&#34;EXCHANGE&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      ],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;ext&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;billing_id&#34;</span>: [
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#34;123456789&#34;</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;open_bidding&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;is_open_bidding&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;adunit_mappings&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;keyvals&#34;</span>: [
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;appid&#34;</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;1000001&#34;</span>
+</span></span><span style="display:flex;"><span>                },
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;placementid&#34;</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;900000001&#34;</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>              ],
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;app&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;android app&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;bundle&#34;</span>: <span style="color:#e6db74">&#34;com.android.app&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;publisher&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;pub-id&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;ext&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;country&#34;</span>: <span style="color:#e6db74">&#34;JP&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;content&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;url&#34;</span>: <span style="color:#e6db74">&#34;https://play.google.com/store/apps/details?id=com.android.app&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;userrating&#34;</span>: <span style="color:#e6db74">&#34;3.5&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;livestream&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;language&#34;</span>: <span style="color:#e6db74">&#34;en&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;storeurl&#34;</span>: <span style="color:#e6db74">&#34;https://play.google.com/store/apps/details?id=com.android.app&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;ext&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;installed_sdk&#34;</span>: [
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;com.google.ads.mediation.pangle.PangleMediationAdapter&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;sdk_version&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;major&#34;</span>: <span style="color:#ae81ff">4</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;minor&#34;</span>: <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;micro&#34;</span>: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;adapter_version&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;major&#34;</span>: <span style="color:#ae81ff">4</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;minor&#34;</span>: <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;micro&#34;</span>: <span style="color:#ae81ff">400</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;device&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;ua&#34;</span>: <span style="color:#e6db74">&#34;Mozilla/5.0 (Linux; Android 9) Chrome/99.0.4844.58&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;ip&#34;</span>: <span style="color:#e6db74">&#34;164.52.25.0&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;geo&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;lat&#34;</span>: <span style="color:#ae81ff">40</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;lon&#34;</span>: <span style="color:#ae81ff">116.31999999999999</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;country&#34;</span>: <span style="color:#e6db74">&#34;CHN&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;region&#34;</span>: <span style="color:#e6db74">&#34;CN-11&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;city&#34;</span>: <span style="color:#e6db74">&#34;Beijing&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;zip&#34;</span>: <span style="color:#e6db74">&#34;100190&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;accuracy&#34;</span>: <span style="color:#ae81ff">15009</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;make&#34;</span>: <span style="color:#e6db74">&#34;samsung&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;model&#34;</span>: <span style="color:#e6db74">&#34;a16&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;os&#34;</span>: <span style="color:#e6db74">&#34;android&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;osv&#34;</span>: <span style="color:#e6db74">&#34;9&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;devicetype&#34;</span>: <span style="color:#ae81ff">4</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;lmt&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;w&#34;</span>: <span style="color:#ae81ff">360</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;h&#34;</span>: <span style="color:#ae81ff">640</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;pxratio&#34;</span>: <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;ext&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;user_agent_data&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;browser&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;brand&#34;</span>: <span style="color:#e6db74">&#34;Chrome&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;version&#34;</span>: [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;99&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;58&#34;</span>
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;platform&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;brand&#34;</span>: <span style="color:#e6db74">&#34;Android&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;version&#34;</span>: [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;9&#34;</span>
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;mobile&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;model&#34;</span>: <span style="color:#e6db74">&#34;a16&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;browsers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;brand&#34;</span>: <span style="color:#e6db74">&#34;Mozilla&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;version&#34;</span>: [
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#34;5&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;brand&#34;</span>: <span style="color:#e6db74">&#34;Chrome&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;version&#34;</span>: [
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#34;99&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#34;58&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;user&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;user-id&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;publisher-id&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Publisher Passed&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;segment&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;appid&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;8000001&#34;</span>
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;placementid&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;900000001&#34;</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;tmax&#34;</span>: <span style="color:#ae81ff">1000</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;cur&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;USD&#34;</span>
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;bcat&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;IAB7-39&#34;</span>
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></div>
+</details>
+
+ </p>
+<hr>
+<p>Didn&rsquo;t really consider a master degree right now, because I felt I am more used to a top-down approach where I come across a real world problem
+and try to break it down to fundamentals.</p>
+<p>Plus, I&rsquo;m already surrounded by many interesting CS problems, peers and seniors in my day-to-day work that are worth spending time with.</p>
 
 
 </div>
