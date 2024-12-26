@@ -7,8 +7,19 @@
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Sun, 17 Dec 2023 15:02:58 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 16 Feb 2024 21:39:17 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A peek into Go Generics</title>
+      <link>http://localhost:1313/posts/go-generics/</link>
+      <pubDate>Fri, 16 Feb 2024 21:39:17 +0800</pubDate>
+      <guid>http://localhost:1313/posts/go-generics/</guid>
+      <description>&lt;p&gt;Since version &lt;code&gt;1.18&lt;/code&gt;, Go has finally introduced the support for generics, together with &lt;code&gt;any&lt;/code&gt; as a type alias of &lt;code&gt;interface{}&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;It gives more flexibility for user to create a general collection for similar data structures. Previously we have no choice but
+to write up the same &lt;code&gt;struct&lt;/code&gt; for each data type we want to support.&lt;/p&gt;
+&lt;p&gt;The syntax can look a bit strange if you are already used to the old-school Go code.
+Or maybe it&amp;rsquo;s just because I haven&amp;rsquo;t used it often enough.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Data Structure in Go - Part 2</title>
       <link>http://localhost:1313/posts/data-structure-2/</link>
