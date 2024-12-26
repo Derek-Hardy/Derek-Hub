@@ -2,7 +2,7 @@ baseURL: "https://derek-hardy.github.io"
 title: Derek's Hub
 copyright: "© [PaperMod Contributors](https://github.com/adityatelange/hugo-PaperMod/graphs/contributors)"
 pagination:
-  pagerSize: 5
+  pagerSize: 10
 theme: [paper-mod]
 
 enableRobotsTXT: true
