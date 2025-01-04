@@ -108,7 +108,6 @@ func main() {
 }
 ```
 {{</details>}}
-&nbsp;
 
 ## Middleware
 
@@ -318,6 +317,7 @@ func (mux *ServeMux) match(path string) (h Handler, pattern string) {
 }
 ```
 {{</details>}}
+&nbsp;
 
 In those cases, we can look out for open source frameworks to help us. Some popular ones that I personally like are: 
 [Gin](https://github.com/gin-gonic/gin) and  [Echo](https://github.com/labstack/echo)
