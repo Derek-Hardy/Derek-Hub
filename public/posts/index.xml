@@ -7,8 +7,18 @@
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Fri, 16 Feb 2024 21:39:17 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 09 Mar 2024 22:35:17 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bits and pieces of HTTP in Go</title>
+      <link>http://localhost:1313/posts/go-http/</link>
+      <pubDate>Sat, 09 Mar 2024 22:35:17 +0800</pubDate>
+      <guid>http://localhost:1313/posts/go-http/</guid>
+      <description>&lt;p&gt;The benefit of being a young programming language is that its design will incorporate the latest software engineering needs from the ground up.
+Concepts like multi-thread processing, building RESTful API become the first class citizens in Go.&lt;/p&gt;
+&lt;p&gt;In fact, this is part of the motivation in designing Golang, as one of the authors commented about older programming languages in the keynote talk
+&lt;a href=&#34;https://go.dev/talks/2012/splash.article&#34;&gt;Go at Google: Language Design in the Service of Software Engineering&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
     <item>
       <title>A peek into Go Generics</title>
       <link>http://localhost:1313/posts/go-generics/</link>
