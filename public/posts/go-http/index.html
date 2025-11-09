@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>Bits and pieces of HTTP in Go | Derek&#39;s Hub</title>
 <meta name="keywords" content="">
 <meta name="description" content="The benefit of being a young programming language is that its design will incorporate the latest software engineering needs from the ground up.
@@ -12,16 +12,16 @@ Concepts like multi-thread processing, building RESTful API become the first cla
 In fact, this is part of the motivation in designing Golang, as one of the authors commented about older programming languages in the keynote talk
 Go at Google: Language Design in the Service of Software Engineering">
 <meta name="author" content="">
-<link rel="canonical" href="https://derek-hardy.github.io/posts/go-http/">
+<link rel="canonical" href="http://localhost:1313/posts/go-http/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.31a038ca4fe29d231a9edae8087cf7ea016d84e6abeb8663f248bda38b0d511b.css" integrity="sha256-MaA4yk/inSMantroCHz36gFthOar64Zj8ki9o4sNURs=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://derek-hardy.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://derek-hardy.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://derek-hardy.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://derek-hardy.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://derek-hardy.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://derek-hardy.github.io/posts/go-http/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/go-http/">
 <noscript>
     <style>
         #theme-toggle,
@@ -58,73 +58,7 @@ Go at Google: Language Design in the Service of Software Engineering">
         }
 
     </style>
-</noscript><meta property="og:url" content="https://derek-hardy.github.io/posts/go-http/">
-  <meta property="og:site_name" content="Derek&#39;s Hub">
-  <meta property="og:title" content="Bits and pieces of HTTP in Go">
-  <meta property="og:description" content="The benefit of being a young programming language is that its design will incorporate the latest software engineering needs from the ground up. Concepts like multi-thread processing, building RESTful API become the first class citizens in Go.
-In fact, this is part of the motivation in designing Golang, as one of the authors commented about older programming languages in the keynote talk Go at Google: Language Design in the Service of Software Engineering">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2024-03-09T22:35:17+08:00">
-    <meta property="article:modified_time" content="2024-03-09T22:35:17+08:00">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Bits and pieces of HTTP in Go">
-<meta name="twitter:description" content="The benefit of being a young programming language is that its design will incorporate the latest software engineering needs from the ground up.
-Concepts like multi-thread processing, building RESTful API become the first class citizens in Go.
-In fact, this is part of the motivation in designing Golang, as one of the authors commented about older programming languages in the keynote talk
-Go at Google: Language Design in the Service of Software Engineering">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "https://derek-hardy.github.io/posts/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "Bits and pieces of HTTP in Go",
-      "item": "https://derek-hardy.github.io/posts/go-http/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Bits and pieces of HTTP in Go",
-  "name": "Bits and pieces of HTTP in Go",
-  "description": "The benefit of being a young programming language is that its design will incorporate the latest software engineering needs from the ground up. Concepts like multi-thread processing, building RESTful API become the first class citizens in Go.\nIn fact, this is part of the motivation in designing Golang, as one of the authors commented about older programming languages in the keynote talk Go at Google: Language Design in the Service of Software Engineering\n",
-  "keywords": [
-    
-  ],
-  "articleBody": "The benefit of being a young programming language is that its design will incorporate the latest software engineering needs from the ground up. Concepts like multi-thread processing, building RESTful API become the first class citizens in Go.\nIn fact, this is part of the motivation in designing Golang, as one of the authors commented about older programming languages in the keynote talk Go at Google: Language Design in the Service of Software Engineering\nThe problems introduced by multicore processors, networked systems, massive computation clusters, and the web programming model were being worked around rather than addressed head-on.\nGo was designed to address a set of software engineering issues exposed in the construction of large server software, more than most general-purpose programming languages.\"\nAs part of its manifestation, Go provides a neat net/http package to quickly build a performant HTTP server where incoming requests will be served by dedicated goroutines, which are scalable to handle growing throughput as the server hardware resources scales.\nLet’s build one The first thing we need is a request router or multiplexer that matches the URL of each incoming request to the right handler. Go has provided a default implementation and we can instantiate it in one line.\nsvr := http.NewServeMux() Then, we need to be aware of an important interface for the request handler.\n// This should look intuitive at a low level on how HTTP server actually works: // given a raw HTTP request object, process it however we need, and write // response back to the same connection. type Handler interface { ServeHTTP(ResponseWriter, *Request) } Go is a functional programming language, so we often write out the handling logic as a function and make use of an adaptor type http.HandlerFunc.\n// It essentially helps us implement the method to satisfy Handler interface // so long as we provide a function that conforms with the below signature type HandlerFunc func(ResponseWriter, *Request) func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) { f(w, r) } Therefore, we can go ahead to implement our handler logic just as a pure function, and make it a handler by converting the function into a HandlerFunc type.\nokFunc := func(w http.ResponseWriter, r *http.Request) { // it will implicitly be set on the first call to \"Write\" w.WriteHeader(http.StatusOK) n, err := w.Write([]byte(\"ok handler responded OK!\")) if err != nil { w.WriteHeader(http.StatusInternalServerError) } log.Printf(\"written %d bytes to the response\\n\", n) } okHandler := http.HandlerFunc(okFunc) Now, we already have all the pieces needed to run a functioning HTTP server!\nTo see the full source code package main import ( \"log\" \"net/http\" ) func main() { okFunc := func(w http.ResponseWriter, r *http.Request) { // it will implicitly be set on the first call to \"Write\" w.WriteHeader(http.StatusOK) n, err := w.Write([]byte(\"ok handler responded OK!\")) if err != nil { w.WriteHeader(http.StatusInternalServerError) } log.Printf(\"written %d bytes to the response\\n\", n) } okHandler := http.HandlerFunc(okFunc) svr := http.NewServeMux() svr.Handle(\"/ok\", okHandler) // serveMux also provides a shortcut to take in the function directly // and convert it to handler for you svr.HandleFunc(\"ok_again\", okFunc) // the http package offers a few default handlers as well svr.Handle(\"/\", http.NotFoundHandler()) // receive incoming request from TCP network address, // and hand it to serveMux to route to the closest // matching handler for processing err := http.ListenAndServe(\":8080\", svr) if err != nil { log.Printf(\"http server exited: %v\\n\", err) } } Middleware As the HTTP service grows more complex, we may reach a point where request pre-processing or post-processing becomes necessary. We wish to chain up a series of operations in a predefined order. We can build the middleware pattern with what net/http package has offered.\nThe full execution order will look like:\n( can be swapped ) request —\u003e serveMux —\u003e middleware request handler —\u003e handler function | response \u003c———————————— middleware response handler \u003c———————| The key idea of a middleware function is to:\ntake in the handler that will execute next, define some work on top of the input handler, hand over the control to the next handler by calling itsServeHTTPmethod return the new handler with the middleware work wrapped around Here are some practical examples:\n// stop the invalid request from proceeding further to optimise // the server load func middlewareDropInvalid(next http.Handler) http.Handler { f := func(w http.ResponseWriter, r *http.Request) { if contentType := r.Header.Get(\"Content-Type\"); contentType == \"\" { http.Error(w, \"no content type specified\", http.StatusBadRequest) return } next.ServeHTTP(w, r) } return http.HandlerFunc(f) } // produce access logs for traceability func middlewareLogging(next http.Handler) http.Handler { f := func(w http.ResponseWriter, r *http.Request) { log.Printf(\"remote client address: %s\\n\", r.RemoteAddr) next.ServeHTTP(w, r) } return http.HandlerFunc(f) } // set the response header when the response is in JSON format func middlewareHeader(next http.Handler) http.Handler { f := func(w http.ResponseWriter, r *http.Request) { next.ServeHTTP(w, r) w.Header().Set(\"Content-Type\", \"application/json\") } return http.HandlerFunc(f) } Depending on whether the middleware is handler specific or global, we can chain them together at either the serveMux level or individual handler level.\n// global middleware - always drop invalid requests and log access before routing // requests to the handler svr := http.NewServeMux() wrappedSvr := middlewareDropInvalid(middlewareLogging(svr)) // handler specific middleware - set header only in this path wrappedSvr.Handle(\"/ok\", middlewareHeader(handlerFunc)) err := http.ListenAndServe(\"localhost:8080\", wrappedSvr) if err != nil { log.Printf(\"http server exited: %v\\n\", err) } Concurrency Just to reiterate on the point of having builtin multi-thread programming in Go. It might be worth to take a closer look at what happens under the hood inhttp.ListenAndServe.\nThis function basically sets up the program to listen at the specified TCP address, and spin up a dedicated goroutine to serve each incoming request.\nThe Go runtime scheduler will then be responsible for distributing these goroutines to run on OS threads across CPU cores, which is defined by GOMAXPROCS environment variable and is default to the number of cores available on the host.\n// Go 1.22.2 source code: net/http/server.go func ListenAndServe(addr string, handler Handler) error { server := \u0026Server{Addr: addr, Handler: handler} return server.ListenAndServe() } // which then calls func (srv *Server) ListenAndServe() error { // redacted for brevity... ln, err := net.Listen(\"tcp\", srv.Addr) if err != nil { return err } return srv.Serve(ln) } // now the fun parts func (srv *Server) Serve(l net.Listener) error { // redacted for brevity... ctx := context.WithValue(baseCtx, ServerContextKey, srv) for { rw, err := l.Accept() if err != nil { // redacted for brevity... return err } connCtx := ctx if cc := srv.ConnContext; cc != nil { connCtx = cc(connCtx, rw) if connCtx == nil { panic(\"ConnContext returned nil\") } } c := srv.newConn(rw) c.setState(c.rwc, StateNew, runHooks) // ** Each connection context is concurrently served in a goroutine, // which internally calls the serveMux's ServeHTTP method go c.serve(connCtx) } } And if we look at the source code of serveMux, it routes the request to the appropriate handler as we have walked through earlier.\n// Go 1.22.2 source code: net/http/server.go func (mux *ServeMux) Handler(r *Request) (h Handler, pattern string) { // Side notes: Go introduced breaking changes in the URL pattern matching, // but it allows flag GODEBUG=httpmuxgo121 to restore older behaviours // https://go.dev/blog/routing-enhancements if use121 { return mux.mux121.findHandler(r) } h, p, _, _ := mux.findHandler(r) return h, p } Going further The builtin net/http package in Go has already offered us the ability to build rather involved HTTP server with relatively small amount of code. However, the real production application often poses more challenges that require an uplift from the standard library.\nThe Handler interface requires to process raw HTTP request object. In the case when we need to differentiate methodsGET,POST,PUTfor the same URl path, the handler code will get very cluttered. It takes extra steps to extract resource identifier from the URL path withhttp.StripPrefix()orstrings.TrimPrefix(). Luckily, the above two are addressed in the Go 1.22 release, which supports pattern matching such as\n// the routing will be based on request method as well svr.Handle(\"GET /resources/{id}\", getHandler) svr.Handle(\"POST /resources/{id}\", postHandler) // the resource identifier can be retrieved in the handler // from the request object using the key id := r.PathValue(\"id\") There can be performance related issue as well.\nIf the request payload contains large JSON data (e.g. OpenRTB bid request can have more than 150 fields), the parsing overhead can be substantial. The default serveMux implements a simple routing (Go 1.21 and before) by sorting all registered paths from the longest to shortest. And the pattern matching is performed sequentially. This can incur latency overhead when the server routing is complex (e.g. having over 100+ registered patterns). Source code // Go 1.21.11 soruce code: net/http/server.go type ServeMux struct { mu sync.RWMutex m map[string]muxEntry es []muxEntry // slice of entries sorted from longest to shortest. hosts bool // whether any patterns contain hostnames } func appendSorted(es []muxEntry, e muxEntry) []muxEntry { n := len(es) i := sort.Search(n, func(i int) bool { return len(es[i].pattern) \u003c len(e.pattern) }) if i == n { return append(es, e) } // we now know that i points at where we want to insert es = append(es, muxEntry{}) // try to grow the slice in place, any entry works. copy(es[i+1:], es[i:]) // Move shorter entries down es[i] = e return es } func (mux *ServeMux) match(path string) (h Handler, pattern string) { // Check for exact match first. v, ok := mux.m[path] if ok { return v.h, v.pattern } // Check for longest valid match. mux.es contains all patterns // that end in / sorted from longest to shortest. for _, e := range mux.es { if strings.HasPrefix(path, e.pattern) { return e.h, e.pattern } } return nil, \"\" } In those cases, we can look out for open source frameworks to help us. Some popular ones that I personally like are: Gin and Echo\nThey make use of techniques such as fastjson to avoid reflection and allocating extra space for structs to speed up parsing JSON data; and Trie-based routing that breaks up URL segments into hierarchical tree nodes for faster lookup.\n",
-  "wordCount" : "1642",
-  "inLanguage": "en",
-  "datePublished": "2024-03-09T22:35:17+08:00",
-  "dateModified": "2024-03-09T22:35:17+08:00",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://derek-hardy.github.io/posts/go-http/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Derek's Hub",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://derek-hardy.github.io/favicon.ico"
-    }
-  }
-}
-</script>
+</noscript>
 </head>
 
 <body class="" id="top">
@@ -142,7 +76,7 @@ Go at Google: Language Design in the Service of Software Engineering">
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://derek-hardy.github.io/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
+            <a href="http://localhost:1313/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -168,12 +102,12 @@ Go at Google: Language Design in the Service of Software Engineering">
         </div>
         <ul id="menu">
             <li>
-                <a href="https://derek-hardy.github.io/posts/" title="Posts">
+                <a href="http://localhost:1313/posts/" title="Posts">
                     <span>Posts</span>
                 </a>
             </li>
             <li>
-                <a href="https://derek-hardy.github.io/about/" title="About">
+                <a href="http://localhost:1313/about/" title="About">
                     <span>About</span>
                 </a>
             </li>
@@ -184,7 +118,7 @@ Go at Google: Language Design in the Service of Software Engineering">
 
 <article class="post-single">
   <header class="post-header">
-    <div class="breadcrumbs"><a href="https://derek-hardy.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://derek-hardy.github.io/posts/">Posts</a></div>
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
       Bits and pieces of HTTP in Go
     </h1>
@@ -489,12 +423,12 @@ and Trie-based routing that breaks up URL segments into hierarchical tree nodes 
     <ul class="post-tags">
     </ul>
 <nav class="paginav">
-  <a class="prev" href="https://derek-hardy.github.io/posts/design-pattern-py/">
+  <a class="prev" href="http://localhost:1313/posts/design-pattern-py/">
     <span class="title">« Prev</span>
     <br>
     <span>Design Patterns in Python</span>
   </a>
-  <a class="next" href="https://derek-hardy.github.io/posts/go-generics/">
+  <a class="next" href="http://localhost:1313/posts/go-generics/">
     <span class="title">Next »</span>
     <br>
     <span>A peek into Go Generics</span>

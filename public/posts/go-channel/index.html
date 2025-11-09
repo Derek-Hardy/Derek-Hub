@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>Common Go channel uses | Derek&#39;s Hub</title>
 <meta name="keywords" content="">
 <meta name="description" content="Go is known for its native support for concurrency. You can easily spin up a concurrent execution (i.e. goroutine) using keyword go.
 It is similar to OS thread but managed by Go runtime scheduler instead of OS kernel. The underlying implementation actually employs an M:N model to multiplex M goroutines onto N threads.
 With the great power of concurrency comes with the responsibility to handle synchronisation in the right manner.">
 <meta name="author" content="">
-<link rel="canonical" href="https://derek-hardy.github.io/posts/go-channel/">
+<link rel="canonical" href="http://localhost:1313/posts/go-channel/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.31a038ca4fe29d231a9edae8087cf7ea016d84e6abeb8663f248bda38b0d511b.css" integrity="sha256-MaA4yk/inSMantroCHz36gFthOar64Zj8ki9o4sNURs=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://derek-hardy.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://derek-hardy.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://derek-hardy.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://derek-hardy.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://derek-hardy.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://derek-hardy.github.io/posts/go-channel/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/go-channel/">
 <noscript>
     <style>
         #theme-toggle,
@@ -57,73 +57,7 @@ With the great power of concurrency comes with the responsibility to handle sync
         }
 
     </style>
-</noscript><meta property="og:url" content="https://derek-hardy.github.io/posts/go-channel/">
-  <meta property="og:site_name" content="Derek&#39;s Hub">
-  <meta property="og:title" content="Common Go channel uses">
-  <meta property="og:description" content="Go is known for its native support for concurrency. You can easily spin up a concurrent execution (i.e. goroutine) using keyword go.
-It is similar to OS thread but managed by Go runtime scheduler instead of OS kernel. The underlying implementation actually employs an M:N model to multiplex M goroutines onto N threads.
-With the great power of concurrency comes with the responsibility to handle synchronisation in the right manner.">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2023-12-01T11:17:04+08:00">
-    <meta property="article:modified_time" content="2023-12-01T11:17:04+08:00">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Common Go channel uses">
-<meta name="twitter:description" content="Go is known for its native support for concurrency. You can easily spin up a concurrent execution (i.e. goroutine) using keyword go.
-It is similar to OS thread but managed by Go runtime scheduler instead of OS kernel. The underlying implementation actually employs an M:N model to multiplex M goroutines onto N threads.
-With the great power of concurrency comes with the responsibility to handle synchronisation in the right manner.">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "https://derek-hardy.github.io/posts/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "Common Go channel uses",
-      "item": "https://derek-hardy.github.io/posts/go-channel/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Common Go channel uses",
-  "name": "Common Go channel uses",
-  "description": "Go is known for its native support for concurrency. You can easily spin up a concurrent execution (i.e. goroutine) using keyword go.\nIt is similar to OS thread but managed by Go runtime scheduler instead of OS kernel. The underlying implementation actually employs an M:N model to multiplex M goroutines onto N threads.\nWith the great power of concurrency comes with the responsibility to handle synchronisation in the right manner.\n",
-  "keywords": [
-    
-  ],
-  "articleBody": "Go is known for its native support for concurrency. You can easily spin up a concurrent execution (i.e. goroutine) using keyword go.\nIt is similar to OS thread but managed by Go runtime scheduler instead of OS kernel. The underlying implementation actually employs an M:N model to multiplex M goroutines onto N threads.\nWith the great power of concurrency comes with the responsibility to handle synchronisation in the right manner.\nIn Go, we can pass messages between different thread of executions using channel.\nUsed as signal Think of sending signals (kill -s signal pid) in the OS inter-process communication:\n// create an unbuffered channel done := make(chan int) // create a parallel execution path to start up a long-running service go func() { server.run() // once the server exits, it synchronises the termination to other threads of execution // by passing a signal to the channel done \u003c- 1 }() // the execution blocks here until a signal is received from the channel \u003c-done Used as message queue The typical producer-consumer pattern can be implemented with Channel.\n// create a buffered channel with size 10; in this case, producer can keep adding messages to the channel // without having to wait for receiver to receive (until the channel capacity is reached). // In the unbuffered case, sender blocks for every message until the receiver has received it. queue := make(chan string, 10) // start the producer goroutine go func() { messages := []string{\"order-1\", \"order-2\", \"order-3\"} for _, msg := range messages { queue \u003c- msg // send message to the channel } close(queue) // done with producing messages }() // the main goroutine acts as the consumer for msg := range queue { fmt.Println(\"Received: %s\", msg) } There is one more builtin call I didn’t mention in the previous post on Go Builtins. That is theclose()call\nYou can think of it as the TCP flagFINto indicate that sender has no more data to send and thus the communication channel should shut down.\nIf the channel is not closed in the above example, therangeloop will block and wait for a value, but loop terminates whenclose()is called on thequeuechannel.\nThe Go doc explains it in more details:\nThe close built-in function closes a channel. It should be executed only by the sender, never the receiver, and has the effect of shutting down the channel after the last sent value is received. After the last value has been received from a closed channel c, any receive from c will succeed without blocking, returning the zero value for the channel element.\nUsed for timeout Channel also comes in handy when you want to enforce timeout for some functions. Think of timer interrupt in the OS used to switch context and execute scheduling decision.\ntime.After() already provided a convenient interface for this:\nfor { // the 'select' will choose the first case that unblocks; otherwise it blocks select { case m := \u003c-orderQueue: fmt.Printf(\"New order: %s\\n\", m) // wait for maximum 1 minute before moving on case t := \u003c-time.After(1 * time.Minute): fmt.Println(t.Format(time.RFC850)) // Friday, 01-Dec-23 12:16:56 +08 fmt.Println(\"Time out: no order received\") } } ",
-  "wordCount" : "520",
-  "inLanguage": "en",
-  "datePublished": "2023-12-01T11:17:04+08:00",
-  "dateModified": "2023-12-01T11:17:04+08:00",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://derek-hardy.github.io/posts/go-channel/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Derek's Hub",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://derek-hardy.github.io/favicon.ico"
-    }
-  }
-}
-</script>
+</noscript>
 </head>
 
 <body class="" id="top">
@@ -141,7 +75,7 @@ With the great power of concurrency comes with the responsibility to handle sync
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://derek-hardy.github.io/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
+            <a href="http://localhost:1313/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -167,12 +101,12 @@ With the great power of concurrency comes with the responsibility to handle sync
         </div>
         <ul id="menu">
             <li>
-                <a href="https://derek-hardy.github.io/posts/" title="Posts">
+                <a href="http://localhost:1313/posts/" title="Posts">
                     <span>Posts</span>
                 </a>
             </li>
             <li>
-                <a href="https://derek-hardy.github.io/about/" title="About">
+                <a href="http://localhost:1313/about/" title="About">
                     <span>About</span>
                 </a>
             </li>
@@ -183,7 +117,7 @@ With the great power of concurrency comes with the responsibility to handle sync
 
 <article class="post-single">
   <header class="post-header">
-    <div class="breadcrumbs"><a href="https://derek-hardy.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://derek-hardy.github.io/posts/">Posts</a></div>
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
       Common Go channel uses
     </h1>
@@ -277,12 +211,12 @@ Think of <em>timer interrupt</em> in the OS used to switch context and execute s
     <ul class="post-tags">
     </ul>
 <nav class="paginav">
-  <a class="prev" href="https://derek-hardy.github.io/posts/data-structure-1/">
+  <a class="prev" href="http://localhost:1313/posts/data-structure-1/">
     <span class="title">« Prev</span>
     <br>
     <span>Data Structure in Go - Part 1</span>
   </a>
-  <a class="next" href="https://derek-hardy.github.io/posts/go-built-in/">
+  <a class="next" href="http://localhost:1313/posts/go-built-in/">
     <span class="title">Next »</span>
     <br>
     <span>Built-in functions in Go</span>

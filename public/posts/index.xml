@@ -2,27 +2,39 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on Derek&#39;s Hub</title>
-    <link>https://derek-hardy.github.io/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on Derek&#39;s Hub</description>
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Tue, 23 Sep 2025 19:00:53 +0800</lastBuildDate>
-    <atom:link href="https://derek-hardy.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 02 Nov 2025 15:18:31 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>New Python Features in 3.10 - 3.14</title>
+      <link>http://localhost:1313/posts/new-features-py/</link>
+      <pubDate>Sun, 02 Nov 2025 15:18:31 +0800</pubDate>
+      <guid>http://localhost:1313/posts/new-features-py/</guid>
+      <description>&lt;p&gt;Starting from Python 3.10 released in Oct 2021 to Python 3.14 released last month, there are plenty of new features
+added to the language that made it more intuitive to use.&lt;/p&gt;
+&lt;p&gt;I want to put a summary here to remind myself to make full use of the modern Pythonic idioms.&lt;/p&gt;
+&lt;h3 id=&#34;deferred-evaluation-of-annotation-314&#34;&gt;Deferred evaluation of annotation (3.14)&lt;/h3&gt;
+&lt;p&gt;Ever since Python 3 introduced type annotation, it is always evaluated immediately. In some cases, when we want to reference
+the type that is not yet defined, we will have to do some trickery by quoting it.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Design Patterns in Python</title>
-      <link>https://derek-hardy.github.io/posts/design-pattern-py/</link>
+      <link>http://localhost:1313/posts/design-pattern-py/</link>
       <pubDate>Tue, 23 Sep 2025 19:00:53 +0800</pubDate>
-      <guid>https://derek-hardy.github.io/posts/design-pattern-py/</guid>
+      <guid>http://localhost:1313/posts/design-pattern-py/</guid>
       <description>&lt;p&gt;As a super flexible language, Python is blazing fast to build working prototypes and get the steam going.
 At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding style.&lt;/p&gt;
 &lt;p&gt;Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).&lt;/p&gt;</description>
     </item>
     <item>
       <title>Bits and pieces of HTTP in Go</title>
-      <link>https://derek-hardy.github.io/posts/go-http/</link>
+      <link>http://localhost:1313/posts/go-http/</link>
       <pubDate>Sat, 09 Mar 2024 22:35:17 +0800</pubDate>
-      <guid>https://derek-hardy.github.io/posts/go-http/</guid>
+      <guid>http://localhost:1313/posts/go-http/</guid>
       <description>&lt;p&gt;The benefit of being a young programming language is that its design will incorporate the latest software engineering needs from the ground up.
 Concepts like multi-thread processing, building RESTful API become the first class citizens in Go.&lt;/p&gt;
 &lt;p&gt;In fact, this is part of the motivation in designing Golang, as one of the authors commented about older programming languages in the keynote talk
@@ -30,9 +42,9 @@ Concepts like multi-thread processing, building RESTful API become the first cla
     </item>
     <item>
       <title>A peek into Go Generics</title>
-      <link>https://derek-hardy.github.io/posts/go-generics/</link>
+      <link>http://localhost:1313/posts/go-generics/</link>
       <pubDate>Fri, 16 Feb 2024 21:39:17 +0800</pubDate>
-      <guid>https://derek-hardy.github.io/posts/go-generics/</guid>
+      <guid>http://localhost:1313/posts/go-generics/</guid>
       <description>&lt;p&gt;Since version &lt;code&gt;1.18&lt;/code&gt;, Go has finally introduced the support for generics, together with &lt;code&gt;any&lt;/code&gt; as a type alias of &lt;code&gt;interface{}&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;It gives more flexibility for user to create a general collection for similar data structures. Previously we have no choice but
 to write up the same &lt;code&gt;struct&lt;/code&gt; for each data type we want to support.&lt;/p&gt;
@@ -41,9 +53,9 @@ Or maybe it&amp;rsquo;s just because I haven&amp;rsquo;t used it often enough.&l
     </item>
     <item>
       <title>Data Structure in Go - Part 2</title>
-      <link>https://derek-hardy.github.io/posts/data-structure-2/</link>
+      <link>http://localhost:1313/posts/data-structure-2/</link>
       <pubDate>Sun, 17 Dec 2023 15:02:58 +0800</pubDate>
-      <guid>https://derek-hardy.github.io/posts/data-structure-2/</guid>
+      <guid>http://localhost:1313/posts/data-structure-2/</guid>
       <description>&lt;p&gt;It is true that Go is designed with a minimalistic touch. It does not have a rich set of collections or in-built data structures like Java,
 where you can just import &lt;code&gt;java.util.PriorityQueue&lt;/code&gt; or &lt;code&gt;java.util.Stack&lt;/code&gt; and start using them.&lt;/p&gt;
 &lt;p&gt;However, besides the basic &lt;code&gt;map&lt;/code&gt; and &lt;code&gt;slice&lt;/code&gt;, Go does come with a builtin &lt;code&gt;container&lt;/code&gt; package that we should at least be aware  and
@@ -51,9 +63,9 @@ make use of it to implement things like &lt;code&gt;Stack&lt;/code&gt;, &lt;code
     </item>
     <item>
       <title>Data Structure in Go - Part 1</title>
-      <link>https://derek-hardy.github.io/posts/data-structure-1/</link>
+      <link>http://localhost:1313/posts/data-structure-1/</link>
       <pubDate>Tue, 05 Dec 2023 20:28:17 +0800</pubDate>
-      <guid>https://derek-hardy.github.io/posts/data-structure-1/</guid>
+      <guid>http://localhost:1313/posts/data-structure-1/</guid>
       <description>&lt;h3 id=&#34;alias-type&#34;&gt;Alias type&lt;/h3&gt;
 &lt;p&gt;Data structures start with the fundamental data types in Go:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;Numbers&lt;/code&gt;, &lt;code&gt;String&lt;/code&gt;, &lt;code&gt;Boolean&lt;/code&gt;, &lt;code&gt;Array&lt;/code&gt;, &lt;code&gt;Struct&lt;/code&gt;, &lt;code&gt;Slice&lt;/code&gt;, &lt;code&gt;Pointer&lt;/code&gt;&lt;/p&gt;
@@ -89,18 +101,18 @@ It&amp;rsquo;s good to be aware of them so as not to get confused when you happe
     </item>
     <item>
       <title>Common Go channel uses</title>
-      <link>https://derek-hardy.github.io/posts/go-channel/</link>
+      <link>http://localhost:1313/posts/go-channel/</link>
       <pubDate>Fri, 01 Dec 2023 11:17:04 +0800</pubDate>
-      <guid>https://derek-hardy.github.io/posts/go-channel/</guid>
+      <guid>http://localhost:1313/posts/go-channel/</guid>
       <description>&lt;p&gt;Go is known for its native support for concurrency. You can easily spin up a concurrent execution (i.e. goroutine) using keyword &lt;code&gt;go&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;It is similar to OS thread but managed by Go runtime scheduler instead of OS kernel. The underlying implementation actually employs an M:N model to multiplex M goroutines onto N threads.&lt;/p&gt;
 &lt;p&gt;With the great power of concurrency comes with the responsibility to handle synchronisation in the right manner.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Built-in functions in Go</title>
-      <link>https://derek-hardy.github.io/posts/go-built-in/</link>
+      <link>http://localhost:1313/posts/go-built-in/</link>
       <pubDate>Wed, 29 Nov 2023 11:17:04 +0800</pubDate>
-      <guid>https://derek-hardy.github.io/posts/go-built-in/</guid>
+      <guid>http://localhost:1313/posts/go-built-in/</guid>
       <description>&lt;p&gt;The builtins are functions in Golang that you can call directly &lt;em&gt;without having to import any package&lt;/em&gt;; they just come with the programming language itself.&lt;/p&gt;
 &lt;p&gt;The full list resides in the builtin standard library: &lt;code&gt;https://pkg.go.dev/builtin&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;Many of the builtin functions are widely used, so it&amp;rsquo;s important to know them by heart.&lt;/p&gt;
@@ -108,9 +120,9 @@ It&amp;rsquo;s good to be aware of them so as not to get confused when you happe
     </item>
     <item>
       <title>YouTube channels I like for learning French</title>
-      <link>https://derek-hardy.github.io/posts/learning-french/</link>
+      <link>http://localhost:1313/posts/learning-french/</link>
       <pubDate>Fri, 30 Jun 2023 12:17:04 +0800</pubDate>
-      <guid>https://derek-hardy.github.io/posts/learning-french/</guid>
+      <guid>http://localhost:1313/posts/learning-french/</guid>
       <description>&lt;p&gt;In my third year at university, I got the chance to experience the French part of Switzerland for a semester through an exchange program
 at Ecole Polytechnique Federale de Lausanne (EPFL).&lt;/p&gt;
 &lt;p&gt;I thought knowing a bit of the language would definitely boost my experience there, so I decided to take a French module at my home university.&lt;/p&gt;
@@ -118,9 +130,9 @@ at Ecole Polytechnique Federale de Lausanne (EPFL).&lt;/p&gt;
     </item>
     <item>
       <title>YouTube channels I like for learning German</title>
-      <link>https://derek-hardy.github.io/posts/learning-german/</link>
+      <link>http://localhost:1313/posts/learning-german/</link>
       <pubDate>Mon, 19 Jun 2023 12:17:04 +0800</pubDate>
-      <guid>https://derek-hardy.github.io/posts/learning-german/</guid>
+      <guid>http://localhost:1313/posts/learning-german/</guid>
       <description>&lt;p&gt;I took German as my first elective module back in my first year of university.&lt;/p&gt;
 &lt;p&gt;Honestly, I found it is a great opportunity to connect with people outside my faculty and from completely different cultural background.&lt;/p&gt;
 &lt;p&gt;And obviously I get to learn about German culture as well.&lt;/p&gt;
