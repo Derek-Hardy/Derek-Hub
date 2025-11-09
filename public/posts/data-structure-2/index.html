@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Data Structure in Go - Part 2 | Derek&#39;s Hub</title>
 <meta name="keywords" content="">
 <meta name="description" content="It is true that Go is designed with a minimalistic touch. It does not have a rich set of collections or in-built data structures like Java,
@@ -12,16 +12,16 @@ where you can just import java.util.PriorityQueue or java.util.Stack and start u
 However, besides the basic map and slice, Go does come with a builtin container package that we should at least be aware  and
 make use of it to implement things like Stack, Queue, PriorityQueue and Deque.">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/data-structure-2/">
+<link rel="canonical" href="https://derek-hardy.github.io/posts/data-structure-2/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.31a038ca4fe29d231a9edae8087cf7ea016d84e6abeb8663f248bda38b0d511b.css" integrity="sha256-MaA4yk/inSMantroCHz36gFthOar64Zj8ki9o4sNURs=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="https://derek-hardy.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://derek-hardy.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://derek-hardy.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://derek-hardy.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://derek-hardy.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/data-structure-2/">
+<link rel="alternate" hreflang="en" href="https://derek-hardy.github.io/posts/data-structure-2/">
 <noscript>
     <style>
         #theme-toggle,
@@ -58,7 +58,73 @@ make use of it to implement things like Stack, Queue, PriorityQueue and Deque.">
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="https://derek-hardy.github.io/posts/data-structure-2/">
+  <meta property="og:site_name" content="Derek&#39;s Hub">
+  <meta property="og:title" content="Data Structure in Go - Part 2">
+  <meta property="og:description" content="It is true that Go is designed with a minimalistic touch. It does not have a rich set of collections or in-built data structures like Java, where you can just import java.util.PriorityQueue or java.util.Stack and start using them.
+However, besides the basic map and slice, Go does come with a builtin container package that we should at least be aware and make use of it to implement things like Stack, Queue, PriorityQueue and Deque.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-12-17T15:02:58+08:00">
+    <meta property="article:modified_time" content="2023-12-17T15:02:58+08:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Data Structure in Go - Part 2">
+<meta name="twitter:description" content="It is true that Go is designed with a minimalistic touch. It does not have a rich set of collections or in-built data structures like Java,
+where you can just import java.util.PriorityQueue or java.util.Stack and start using them.
+However, besides the basic map and slice, Go does come with a builtin container package that we should at least be aware  and
+make use of it to implement things like Stack, Queue, PriorityQueue and Deque.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://derek-hardy.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Data Structure in Go - Part 2",
+      "item": "https://derek-hardy.github.io/posts/data-structure-2/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Data Structure in Go - Part 2",
+  "name": "Data Structure in Go - Part 2",
+  "description": "It is true that Go is designed with a minimalistic touch. It does not have a rich set of collections or in-built data structures like Java, where you can just import java.util.PriorityQueue or java.util.Stack and start using them.\nHowever, besides the basic map and slice, Go does come with a builtin container package that we should at least be aware and make use of it to implement things like Stack, Queue, PriorityQueue and Deque.\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "It is true that Go is designed with a minimalistic touch. It does not have a rich set of collections or in-built data structures like Java, where you can just import java.util.PriorityQueue or java.util.Stack and start using them.\nHowever, besides the basic map and slice, Go does come with a builtin container package that we should at least be aware and make use of it to implement things like Stack, Queue, PriorityQueue and Deque.\ncontainer/list Go has a doubly linked list implementation. Each node looks like:\ntype Element struct { prev, next *Element Value any } Most fundamentally, it supports to append and peek the Element from the tail of the list, which means we can implement a Stack:\nimport \"container/list\" type Stack struct { data *list.List } func NewStack() *Stack { return \u0026Stack{ data: list.New(), } } func (s *Stack) Push(value any) { s.data.PushBack(value) // push element in from the back i.e. append } func (s *Stack) Pop() any { elem := s.data.Back() return s.data.Remove(elem) } func (s *Stack) Top() any { elem := s.data.Back() // stack is first in, last out return elem.Value } The List also allows us to peek from the head. We can also build a queue from it:\ntype Queue struct { data *list.List } func NewQueue() *Queue { return \u0026Queue{ data: list.New(), } } // let's build a queue of integers func (q *Queue) Add(val int) { q.data.PushBack(val) } func (q *Queue) Poll() int { elem := q.data.Front() // queue is first in, first out if elem == nil { return -1 // or whatever identifier that makes sense to the application, e.g. math.MinInt } value := q.data.Remove(elem) return value.(int) } func (q *Queue) Peek() int { elem := q.data.Front() return elem.Value.(int) } func (q *Queue) Len() int { return q.data.Len() // get the current number of elements in the queue } // what's more, we can print the current queue func (q *Queue) Print() { for e := q.data.Front(); e != nil; e = e.Next() { fmt.Printf(\"%d \", e.Value) } fmt.Println() } func (q *Queue) Clear() { q.data.Init() // clear all data in the queue; basically re-initialized the list } There is one more convenient function MoveToFront that moves the specified element to the head of the list. I find it really help when implementing an LRU cache. There is MoveToBack available too, if you prefer.\ntype LRU struct { data *list.List m map[string]*list.Element size int } func NewCache(capacity int) *LRU { return \u0026LRU{ data: list.New(), m: make(map[string]*list.Element), size: capacity, } } func (c *LRU) Get(key string) any { elem, ok := c.m[key] if !ok { return nil } // move the last visited element to the head of the list c.data.MoveToFront(elem) return e.Value } func (c *LRU) Put(key string, val any) { if c.data.Len() \u003e= c.size { c.evict() } elem := c.data.PushFront(val) c.m[key] = elem } func (c *LRU) evict() { elem := c.data.Back() // remove the least recently visited element from the tail of the list c.data.Remove(elem) } container/heap Go also provides an interface to construct min heap, which is an ordered complete binary tree where each node is smaller than all its children.\npackage heap type Interface interface { sort.Interface Push(x any) // add x as element Len() Pop() any // remove and return element Len() - 1. } And sort interface allows user to define sorting behaviours of custom collections.\npackage sort type Interface interface { // Returns the number of elements in the collection Len() int // Return true if element at index i is less than element at index j Less(i, j int) bool // Swap swaps the elements with indexes i and j. Swap(i, j int) } Now we have the arsenal to try to implement a PriorityQueue in Go.\ntype Stock struct { Code string Price int } type PriorityQueue struct { stocks []*Stock } // implement sort.Interface func (q PriorityQueue) Less(i, j int) bool { return q.stocks[i].Price \u003c q.stocks[j].Price } func (q PriorityQueue) Swap(i, j int) { q.stocks[i], q.stocks[j] = q.stocks[j], q.stocks[i] } func (q PriorityQueue) Len() int { return len(q.stocks) } // implement heap.Interface func (q *PriorityQueue) Push(s any) { item := x.(*Stock) q.stocks = append(q.stocks, item) } func (q *PriorityQueue) Pop() any { size := len(q.stocks) if size == 0 { return nil } item := q.stocks[size-1] q.stocks = q.stocks[:size-1] return item } If we run through an example, we will see that the Stocks are sorted by their respective prices in ascending order.\nfunc main() { pq := PriorityQueue{ stocks: make([]*Stock, 0), } list := []*Stock{ { Code: \"GOOG\", Price: 197, }, { Code: \"SQ\", Price: 91, }, { Code: \"TSLA\", Price: 462, } } for _, s := range list { pq.Push(s) } heap.Init(\u0026pq) // build up the heap properties by heapifying the collection count := pq.Len() for i := 0; i \u003c count; i++ { s := heap.Pop(\u0026pq).(*Stock) fmt.Printf(\"code: %s, price: %d\\n\", s.Code, s.Price) } } Below output is seen as expected\ncode: SQ, price: 91 code: GOOG, price: 197 code: TSLA, price: 462 ",
+  "wordCount" : "836",
+  "inLanguage": "en",
+  "datePublished": "2023-12-17T15:02:58+08:00",
+  "dateModified": "2023-12-17T15:02:58+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://derek-hardy.github.io/posts/data-structure-2/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Derek's Hub",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://derek-hardy.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -76,7 +142,7 @@ make use of it to implement things like Stack, Queue, PriorityQueue and Deque.">
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
+            <a href="https://derek-hardy.github.io/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -102,12 +168,12 @@ make use of it to implement things like Stack, Queue, PriorityQueue and Deque.">
         </div>
         <ul id="menu">
             <li>
-                <a href="http://localhost:1313/posts/" title="Posts">
+                <a href="https://derek-hardy.github.io/posts/" title="Posts">
                     <span>Posts</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/about/" title="About">
+                <a href="https://derek-hardy.github.io/about/" title="About">
                     <span>About</span>
                 </a>
             </li>
@@ -118,7 +184,7 @@ make use of it to implement things like Stack, Queue, PriorityQueue and Deque.">
 
 <article class="post-single">
   <header class="post-header">
-    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <div class="breadcrumbs"><a href="https://derek-hardy.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://derek-hardy.github.io/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
       Data Structure in Go - Part 2
     </h1>
@@ -372,12 +438,12 @@ than all its children.</p>
     <ul class="post-tags">
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://localhost:1313/posts/go-generics/">
+  <a class="prev" href="https://derek-hardy.github.io/posts/go-generics/">
     <span class="title">« Prev</span>
     <br>
     <span>A peek into Go Generics</span>
   </a>
-  <a class="next" href="http://localhost:1313/posts/data-structure-1/">
+  <a class="next" href="https://derek-hardy.github.io/posts/data-structure-1/">
     <span class="title">Next »</span>
     <br>
     <span>Data Structure in Go - Part 1</span>

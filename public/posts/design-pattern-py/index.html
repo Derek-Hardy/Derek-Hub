@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Design Patterns in Python | Derek&#39;s Hub</title>
 <meta name="keywords" content="">
 <meta name="description" content="As a super flexible language, Python is blazing fast to build working prototypes and get the steam going.
 At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding style.
 Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/design-pattern-py/">
+<link rel="canonical" href="https://derek-hardy.github.io/posts/design-pattern-py/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.31a038ca4fe29d231a9edae8087cf7ea016d84e6abeb8663f248bda38b0d511b.css" integrity="sha256-MaA4yk/inSMantroCHz36gFthOar64Zj8ki9o4sNURs=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="https://derek-hardy.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://derek-hardy.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://derek-hardy.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://derek-hardy.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://derek-hardy.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/design-pattern-py/">
+<link rel="alternate" hreflang="en" href="https://derek-hardy.github.io/posts/design-pattern-py/">
 <noscript>
     <style>
         #theme-toggle,
@@ -57,7 +57,72 @@ Therefore, I would always prefer to look out for idiomatic patterns to keep the 
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="https://derek-hardy.github.io/posts/design-pattern-py/">
+  <meta property="og:site_name" content="Derek&#39;s Hub">
+  <meta property="og:title" content="Design Patterns in Python">
+  <meta property="og:description" content="As a super flexible language, Python is blazing fast to build working prototypes and get the steam going. At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding style.
+Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-09-23T19:00:53+08:00">
+    <meta property="article:modified_time" content="2025-09-23T19:00:53+08:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Design Patterns in Python">
+<meta name="twitter:description" content="As a super flexible language, Python is blazing fast to build working prototypes and get the steam going.
+At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding style.
+Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://derek-hardy.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Design Patterns in Python",
+      "item": "https://derek-hardy.github.io/posts/design-pattern-py/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Design Patterns in Python",
+  "name": "Design Patterns in Python",
+  "description": "As a super flexible language, Python is blazing fast to build working prototypes and get the steam going. At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding style.\nTherefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "As a super flexible language, Python is blazing fast to build working prototypes and get the steam going. At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding style.\nTherefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).\nSingleton It means only one instance of the class should exist during a program’s lifetime.\nA refresher on the Python object creation process:\n__new__(cls): the very first step to allocate memory for the raw instance __init__(self): fills in the details (attributes) for the new instance object returned by the above step Now, we want to have a shared cache object:\nimport time class SingleCache: _instance = None # class-level attribute def __new__(cls): # allocate new instance only when there isn't one; otherwise it reuses the same one if not cls._instance: cls._instance = super().__new__(cls) # all class inherits from 'object' cls._instance._cache = {} return cls._instance def set(self, k, v, ttl=10): expiry = time.time() + ttl self._cache[k] = (v, expiry) # self = cls._instance = obj returned by __new__() def get(self, k): if k not in self._cache: return None v, expiry = self._cache[k] if time.time() \u003e expiry: del self._cache[k] return None return v Another thing to note, in Python, modules are imported once per interpreter. Every import just reuses the same module object. So we can actually define the singleton object at the module level.\n# single_cache.py class SingleCache: def __init__(self): print(\"initialise all attributes...\") self._cache = {} cache = SingleCache() # and then use it from other places from single_cache import SingleCache Decorator It is arguably the most Python-native design pattern more than anything else. The decorator wraps around the core function to add behaviours immediately before and after its execution.\nFrom my experience, it is most useful to add observability, caching and recovery mechanism around functions in the least disturbing way possible.\nIt looks self-explanatory in its minimal form:\ndef decorator(func): def wrapper(*args, **kwargs): # just pass in positional \u0026 keyword arguments that func accepts print(\"set up before the func\") result = func(*args, **kwargs) print(\"modifications after the func\") return result return wrapper A practical example if we want to profile compute-heavy operations in the time dimension is to have a timer decorator:\nimport time from functools import wraps def time_it(func): # preserve original func metadata (__name__, __doc__) instead of being overridden by wrapper function # in order to keep a less confusing call stack @wraps(func) def wrapper(*args, **kwargs): start = time.time() result = func(*args, **kwargs) elapsed = time.time() - start print(f\"{func.__name__} completed in {elapsed:.2f} seconds\") return result return wrapper # now we use it # '@time_it' is actually a syntactic sugar for the full form: # slow_compute = time_it(slow_compute) @time_it def slow_compute(): time.sleep(20) return \"done\" In fact, there are a lot of pre-built decorators we can just plug in and use:\n@timing: measure function execution time @log_exceptions: log exception with the function name @functools.lru_cache(maxsize=16): cache function results to be re-used for the same calling arguments @retry(times=3, delay=1): re-execute the function that might fail due to transient errors (e.g. rate limits) @singleton: decorate around class definition to enforce only one instance is ever created Iterator It allows us to traverse through a collection of elements sequentially without worrying about how the internal data structure looks like in order to do it.\nThe pattern boils down to a protocol of 2 APIs:\n__iter__(): return an iterator __next(): return the next item, or raise StopIteration when we exhaust the collection Any object that implements the above two is an iterator. Any object that implements only __iter__() is an iterable.\nIt might look natural that we traverse through a list using for-loop:\nnums = [1, 2, 3] for n in nums: print(n) # 1, 2, 3 And the for-loop syntax is actually interpreted as:\nit = iter(nums) while True: try: n = next(it) except StopIteration: break A practical use is when we want to process a huge log file, instead of loading everything in memory at once, we can design an iterator to load the data bit by bit for more efficient memory footprint.\nclass BigFileIterator: def __init__(self, path, chunk_size=1024): self.path = path self.chunk_size = chunk_size self.buffer = \"\" self.file = None def __iter__(self): self.file = open(self.path, \"r\") return self def __next__(self): while True: # only return one line at a time newline = self.buffer.find(\"\\n\") if newline != -1: line = self.buffer[:newline] self.buffer = self.buffer[newline + 1:] return line # only load 'chunk_size' amount of data into memory buffer at a time chunk = self.file.read(self.chunk_size) if not chunk: if self.buffer: return self._flush() # EOF - flush the remaining buffer self.file.close() raise StopIteration self.buffer += chunk def _flush(self): _line = self.buffer self.buffer = \"\" return _line This is just an illustration of how lazy loading can be effective in dealing with large data using iterator. In reality, it would be better to design such usage as a context manager where file handle is properly opened and closed upon enter and exit.\nBuilder It allows us to construct complex objects with many optional parameters step by step instead of having a gigantic constructor or assigning attributes all over the place.\nThe builder uses method chaining to make the same task look cleaner and more extensible, and encourages immutability after creation.\nFor instance, we want to build a custom HTTP client. It can be done in a very modular way:\nfrom dataclasses import dataclass @dataclass # automatically generate __init__ method class HttpClientConfig: base_url: str time_out: int retries: int headers: dict class HttpClient: def __init__(self, config: HttpClientConfig): self._config = config self._init_session() def _init_session(self): print(\"set up the request session...\") def get(self, path: str): print(f\"GET {self._config.base_url}/{path}\") class HttpClientBuilder: def __init__(self, base_url: str): self._base_url = base_url self._time_out = None self._retries = None self._headers = None def with_timeout(self, seconds: int): self._time_out = seconds def with_retries(self, retries: int): self._retries = retries def with_headers(self, headers: dict): self._headers = headers def build(self): cfg = HttpClientConfig( base_url=self._base_url, time_out=self._time_out, retries=self._retries, headers=self._headers ) return HttpClient(cfg) Observer Because functions are first-class in Python, it is easy to create a simple observer pattern to broadcast events to all interested components.\nclass Notification: def __init__(self): self.subscribers = [] def subscribe(self, call_back): self.subscribers.append(call_back) def notify(self, event): for fn in self.subscribers: fn(event) ",
+  "wordCount" : "1049",
+  "inLanguage": "en",
+  "datePublished": "2025-09-23T19:00:53+08:00",
+  "dateModified": "2025-09-23T19:00:53+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://derek-hardy.github.io/posts/design-pattern-py/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Derek's Hub",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://derek-hardy.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -75,7 +140,7 @@ Therefore, I would always prefer to look out for idiomatic patterns to keep the 
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
+            <a href="https://derek-hardy.github.io/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -101,12 +166,12 @@ Therefore, I would always prefer to look out for idiomatic patterns to keep the 
         </div>
         <ul id="menu">
             <li>
-                <a href="http://localhost:1313/posts/" title="Posts">
+                <a href="https://derek-hardy.github.io/posts/" title="Posts">
                     <span>Posts</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/about/" title="About">
+                <a href="https://derek-hardy.github.io/about/" title="About">
                     <span>About</span>
                 </a>
             </li>
@@ -117,7 +182,7 @@ Therefore, I would always prefer to look out for idiomatic patterns to keep the 
 
 <article class="post-single">
   <header class="post-header">
-    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <div class="breadcrumbs"><a href="https://derek-hardy.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://derek-hardy.github.io/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
       Design Patterns in Python
     </h1>
@@ -361,7 +426,7 @@ In reality, it would be better to design such usage as a <strong>context manager
     <ul class="post-tags">
     </ul>
 <nav class="paginav">
-  <a class="next" href="http://localhost:1313/posts/go-http/">
+  <a class="next" href="https://derek-hardy.github.io/posts/go-http/">
     <span class="title">Next »</span>
     <br>
     <span>Bits and pieces of HTTP in Go</span>

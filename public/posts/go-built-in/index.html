@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Built-in functions in Go | Derek&#39;s Hub</title>
 <meta name="keywords" content="">
 <meta name="description" content="The builtins are functions in Golang that you can call directly without having to import any package; they just come with the programming language itself.
@@ -12,16 +12,16 @@ The full list resides in the builtin standard library: https://pkg.go.dev/builti
 Many of the builtin functions are widely used, so it&rsquo;s important to know them by heart.
 The motivation for this post comes from the fact that Go 1.21.0 has introduced multiple new handy builtins (which doesn&rsquo;t happen frequently).">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/go-built-in/">
+<link rel="canonical" href="https://derek-hardy.github.io/posts/go-built-in/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.31a038ca4fe29d231a9edae8087cf7ea016d84e6abeb8663f248bda38b0d511b.css" integrity="sha256-MaA4yk/inSMantroCHz36gFthOar64Zj8ki9o4sNURs=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="https://derek-hardy.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://derek-hardy.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://derek-hardy.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://derek-hardy.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://derek-hardy.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/go-built-in/">
+<link rel="alternate" hreflang="en" href="https://derek-hardy.github.io/posts/go-built-in/">
 <noscript>
     <style>
         #theme-toggle,
@@ -58,7 +58,75 @@ The motivation for this post comes from the fact that Go 1.21.0 has introduced m
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="https://derek-hardy.github.io/posts/go-built-in/">
+  <meta property="og:site_name" content="Derek&#39;s Hub">
+  <meta property="og:title" content="Built-in functions in Go">
+  <meta property="og:description" content="The builtins are functions in Golang that you can call directly without having to import any package; they just come with the programming language itself.
+The full list resides in the builtin standard library: https://pkg.go.dev/builtin
+Many of the builtin functions are widely used, so it’s important to know them by heart.
+The motivation for this post comes from the fact that Go 1.21.0 has introduced multiple new handy builtins (which doesn’t happen frequently).">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-11-29T11:17:04+08:00">
+    <meta property="article:modified_time" content="2023-11-29T11:17:04+08:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Built-in functions in Go">
+<meta name="twitter:description" content="The builtins are functions in Golang that you can call directly without having to import any package; they just come with the programming language itself.
+The full list resides in the builtin standard library: https://pkg.go.dev/builtin
+Many of the builtin functions are widely used, so it&rsquo;s important to know them by heart.
+The motivation for this post comes from the fact that Go 1.21.0 has introduced multiple new handy builtins (which doesn&rsquo;t happen frequently).">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://derek-hardy.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Built-in functions in Go",
+      "item": "https://derek-hardy.github.io/posts/go-built-in/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Built-in functions in Go",
+  "name": "Built-in functions in Go",
+  "description": "The builtins are functions in Golang that you can call directly without having to import any package; they just come with the programming language itself.\nThe full list resides in the builtin standard library: https://pkg.go.dev/builtin\nMany of the builtin functions are widely used, so it\u0026rsquo;s important to know them by heart.\nThe motivation for this post comes from the fact that Go 1.21.0 has introduced multiple new handy builtins (which doesn\u0026rsquo;t happen frequently).\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "The builtins are functions in Golang that you can call directly without having to import any package; they just come with the programming language itself.\nThe full list resides in the builtin standard library: https://pkg.go.dev/builtin\nMany of the builtin functions are widely used, so it’s important to know them by heart.\nThe motivation for this post comes from the fact that Go 1.21.0 has introduced multiple new handy builtins (which doesn’t happen frequently).\nmin(), max() The most exciting addition in Go 1.21.0 in my opinion! Before that, there isn’t out-of-box support for numeric comparison like Math.min() in Java. As a result, I often ended up writing my own utility function to do it.\nNow the builtins support to select the minimum/maximum out of one or more values we specified.\nThe functions take in integer, float (select in numeric order) and string (select in alphabetical order). The usage is quite self-explanatory:\nn := min(5, 1, -2, 4, 3) fmt.Println(n) // -2 m := max(5, 1, -2, 4, 3) fmt.Println(m) // 5 s := min(\"derek\", \"chris\", \"hardy\", \"Christopher\") fmt.Println(s) // Christopher len() It returns the length of a data structure based on its type, which usually means the number of elements currently present in it.\nTo break down a bit further:\nType Length array / slice / map number of elements contained string number of bytes / characters (since 1 char = 1 byte) channel number of elements in the buffer func main() { data := []int{1, 2, 3, 4, 5} fmt.Println(len(data)) // outputs 5 } There is another call cap() to get the capacity of the object, which means the total number of elements that can be held without resizing (usually doubling) the underlying allocated space.\nmake() It allocates memory and initialises the object (slice/map/channel/struct).\nOptionally you can specify the length \u0026 capacity, beyond which a slice / map will resize by allocating more space dynamically to accommodate more elements.\nfunc main() { myMap := make(map[string]int) // specify the slice length to be 5, and capacity to be 10 mySlice := make([]int, 5, 10) fmt.Println(len(myMap)) // 0 fmt.Println(len(mySlice)) // 5 } You may have already noticed, make() and composite literals are two ways in Go to initialise data structures.\nUsing composite literal allows you to provide initial values. For example:\ns := []int{1, 2} m := map[string]int{ \"derek\": 1, \"hardy\": 2, } Otherwise, they are pretty much the same.\nThere is actually one more new() builtin, which allocates space for a given type and returns a pointer to the zero value of that type.\nappend() Specific to slice data structure, it literally appends given elements to the end of a slice.\nThe function then returns the updated slice.\nmySlice := make([]string, 0) mySlice = append(mySlice, \"one\", \"two\", \"three\") fmt.Println(len(mySlice)) // returns 3 copy() Specific to slice data structure, it copies elements from source slice to destination slice.\nThe function then returns the number of elements copied. It’s useful if you need a deep copy of the slice.\nsrc := []int{1, 2, 3} dest = make([]int, 3) n := copy(src, dest) // n = 3, dest = []int{1,2,3} delete() Specific to map data structure, it literally deletes a key-value pair from the map.\nmyMap := map[string]int{ \"derek\": 1, \"hardy\": 2, } fmt.Println(myMap) // map[derek:1 hardy:2] delete(myMap, \"derek\") fmt.Println(myMap) // map[hardy:2] clear() It is newly added in Go 1.21.0 that deletes all entries for map \u0026 slice.\nIf you are familiar with Java, it is the same as clear() method in HashMap / List.\nimport java.util.*; public class Main { public static void main(String[] args) { Map\u003cString, Integer\u003e m = new HashMap\u003c\u003e(); m.put(\"derek\", 1); System.out.println(m); // {derek=1} m.clear(); System.out.println(m); // {} } } In Go, it works as below:\nmyMap := map[string]int{ \"derek\": 1, \"hardy\": 2, } fmt.Println(myMap) // map[derek:1 hardy:2] clear(myMap) fmt.Println(myMap) // map[] panic() and recover() Quote the explanation from official Go doc:\nThe panic built-in function stops normal execution of the current goroutine\nUsually we place it under the error path:\nresp, err := testFunc() if err != nil { panic(err) } defer cleanUp() The defer statements within the same calling context as panic will still be executed.\nHowever, we seldom use this pattern in the production service code because error can be better handled and logged. Furthermore, fallback strategy should be in place to degrade the service instead of ceasing it abruptly in most cases.\nThe panic-recover pair in Golang is similar to try-catch in Java. (defer for finally if you wish)\nrecover() has to be called in the defer statement (the only code that can execute after panic) to regain control and handle error passed into the panic() earlier on.\nfunc run() { defer func() { // define anonymous function if r := recover(); r != nil { // the call to recover returns the error passed in to panic fmt.Printf(\"RECOVERED FROM ERR: %v\\n\", r) } }() // trigger the anonymous function we just defined err := execute() // function defined elsewhere if err != nil { panic(err) } } Still I rarely use this feature. It might be simpler to enrich the error context (e.g. fmt.Errorf(\"failed to run, %w\", err)) and pass the error up to the caller and handle at the most appropriate level. It also greatly improves the traceability of error and makes debugging a lot easier.\nprint() and println() I’m sure fmt.Println(\"Hello World!\") is the first line in everyone’s Go journey.\nThe builtin counterparts print and println do the same thing except output to the standard error.\nFYI: the file descriptor for stdout is 1, and for stderr is 2. So the fmt and builtin actually output to different streams.\nYou usually want to separate regular application output (for observability) from error messages (for diagnostics). To do so, for example:\n./my_program \u003e out.txt 2\u003e err.txt It might come in handy to use builtin print in dev work for debugging to save some typings.\nHowever, it is still important to consider logger for observability in the production service.\n",
+  "wordCount" : "993",
+  "inLanguage": "en",
+  "datePublished": "2023-11-29T11:17:04+08:00",
+  "dateModified": "2023-11-29T11:17:04+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://derek-hardy.github.io/posts/go-built-in/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Derek's Hub",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://derek-hardy.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -76,7 +144,7 @@ The motivation for this post comes from the fact that Go 1.21.0 has introduced m
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
+            <a href="https://derek-hardy.github.io/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -102,12 +170,12 @@ The motivation for this post comes from the fact that Go 1.21.0 has introduced m
         </div>
         <ul id="menu">
             <li>
-                <a href="http://localhost:1313/posts/" title="Posts">
+                <a href="https://derek-hardy.github.io/posts/" title="Posts">
                     <span>Posts</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/about/" title="About">
+                <a href="https://derek-hardy.github.io/about/" title="About">
                     <span>About</span>
                 </a>
             </li>
@@ -118,7 +186,7 @@ The motivation for this post comes from the fact that Go 1.21.0 has introduced m
 
 <article class="post-single">
   <header class="post-header">
-    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <div class="breadcrumbs"><a href="https://derek-hardy.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://derek-hardy.github.io/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
       Built-in functions in Go
     </h1>
@@ -319,12 +387,12 @@ It also greatly improves the traceability of error and makes debugging a lot eas
     <ul class="post-tags">
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://localhost:1313/posts/go-channel/">
+  <a class="prev" href="https://derek-hardy.github.io/posts/go-channel/">
     <span class="title">« Prev</span>
     <br>
     <span>Common Go channel uses</span>
   </a>
-  <a class="next" href="http://localhost:1313/posts/learning-french/">
+  <a class="next" href="https://derek-hardy.github.io/posts/learning-french/">
     <span class="title">Next »</span>
     <br>
     <span>YouTube channels I like for learning French</span>

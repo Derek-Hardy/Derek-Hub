@@ -1,6 +1,6 @@
 ## About me 🧑🏻‍💻
 
-I have been mostly hacking in **Golang** and **Java**, and appreciate both functional & object-oriented programming paradigms to solve real world engineering problems.
+I have been mostly hacking in **Python** and **Golang**, and appreciate both functional & object-oriented programming paradigms to solve real world engineering problems.
 
 Right now I'm a three-year experienced software engineer @ **Goldman Sachs**, focusing on building the firm's distributed scheduling platform for batch workflows.
 
