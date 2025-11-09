@@ -7,8 +7,19 @@
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Sat, 09 Mar 2024 22:35:17 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 23 Sep 2025 19:00:53 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Design Patterns in Python</title>
+      <link>http://localhost:1313/posts/design-pattern-py/</link>
+      <pubDate>Tue, 23 Sep 2025 19:00:53 +0800</pubDate>
+      <guid>http://localhost:1313/posts/design-pattern-py/</guid>
+      <description>&lt;p&gt;As a super flexible language, Python is ideal to quickly build prototypes and get the steam going.
+At the same time, it can end up to become a messy codebase and a pain to read later.&lt;/p&gt;
+&lt;p&gt;Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (for me and others).&lt;/p&gt;
+&lt;h3 id=&#34;singleton&#34;&gt;Singleton&lt;/h3&gt;
+&lt;p&gt;It means only one instance of the class should exist during a program&amp;rsquo;s lifetime.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Bits and pieces of HTTP in Go</title>
       <link>http://localhost:1313/posts/go-http/</link>
