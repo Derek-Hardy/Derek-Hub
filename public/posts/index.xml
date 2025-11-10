@@ -14,14 +14,14 @@
       <link>http://localhost:1313/posts/new-features-py/</link>
       <pubDate>Sun, 02 Nov 2025 15:18:31 +0800</pubDate>
       <guid>http://localhost:1313/posts/new-features-py/</guid>
-      <description>&lt;p&gt;Starting from Python 3.10 released in Oct 2021 to Python 3.14 released last month, there are plenty of new features
+      <description>&lt;p&gt;Starting from Python 3.10 (released Oct 2021) to Python 3.14 (released last month), there are quite a few new features
 added to the language that made it more intuitive to use.&lt;/p&gt;
-&lt;p&gt;I want to put a summary here to remind myself to make full use of the modern Pythonic idioms.&lt;/p&gt;
-&lt;p&gt;Starting with the one I&amp;rsquo;m most excited about:&lt;/p&gt;
+&lt;p&gt;I want to put a summary here to remind myself and always try to make full use of the modern Pythonic idioms.
+Starting with the one I&amp;rsquo;m most excited about:&lt;/p&gt;
 &lt;h3 id=&#34;max-heap-314&#34;&gt;Max heap! (3.14)&lt;/h3&gt;
 &lt;p&gt;For a long time, Python only natively supports min heap. Users are sort of forced to play the trick
-to negate the value whenever we realised max heap is needed for the problem. This is very error-prone
-in that it is super easy to forget about the &amp;lsquo;-&amp;rsquo; sign on the way in or out.&lt;/p&gt;</description>
+to negate the value whenever we find max heap is needed for the problem. This is very error-prone
+in that it&amp;rsquo;s super easy to forget about the &amp;lsquo;-&amp;rsquo; sign on the way in or out.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Design Patterns in Python</title>
@@ -31,6 +31,26 @@ in that it is super easy to forget about the &amp;lsquo;-&amp;rsquo; sign on the
       <description>&lt;p&gt;As a super flexible language, Python is blazing fast to build working prototypes and get the steam going.
 At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding style.&lt;/p&gt;
 &lt;p&gt;Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Productivity Boost in Git</title>
+      <link>http://localhost:1313/posts/git-productivity/</link>
+      <pubDate>Sun, 20 Jul 2025 12:09:55 +0800</pubDate>
+      <guid>http://localhost:1313/posts/git-productivity/</guid>
+      <description>&lt;p&gt;From time to time, I try to review if I have made use of the tooling at hand in an effective way.
+Based on my experience with Git over the years, I want to put down some of my most frequently used utilities here.&lt;/p&gt;
+&lt;h3 id=&#34;making-changes&#34;&gt;Making changes&lt;/h3&gt;
+&lt;p&gt;I started using specialised &lt;code&gt;git switch&lt;/code&gt; command for branch operations:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# switch to a new local branch&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch -c &amp;lt;branch-name&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# switch to an existing local branch&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch &amp;lt;branch-name&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# switch to the last branch I was at&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch -
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# switch to remote branch: &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# it auto-creates the local branch of the same name if not exist and tracks the given remote branch; all in one!&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch &amp;lt;remote-branch-name&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The only time I still use &lt;code&gt;git checkout&lt;/code&gt; is for file restoration:&lt;/p&gt;</description>
     </item>
     <item>
       <title>Bits and pieces of HTTP in Go</title>
