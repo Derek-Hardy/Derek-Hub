@@ -10,16 +10,18 @@
     <lastBuildDate>Sun, 02 Nov 2025 15:18:31 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>New Python Features in 3.10 - 3.14</title>
+      <title>New Python Features 3.10 - 3.14</title>
       <link>http://localhost:1313/posts/new-features-py/</link>
       <pubDate>Sun, 02 Nov 2025 15:18:31 +0800</pubDate>
       <guid>http://localhost:1313/posts/new-features-py/</guid>
       <description>&lt;p&gt;Starting from Python 3.10 released in Oct 2021 to Python 3.14 released last month, there are plenty of new features
 added to the language that made it more intuitive to use.&lt;/p&gt;
 &lt;p&gt;I want to put a summary here to remind myself to make full use of the modern Pythonic idioms.&lt;/p&gt;
-&lt;h3 id=&#34;deferred-evaluation-of-annotation-314&#34;&gt;Deferred evaluation of annotation (3.14)&lt;/h3&gt;
-&lt;p&gt;Ever since Python 3 introduced type annotation, it is always evaluated immediately. In some cases, when we want to reference
-the type that is not yet defined, we will have to do some trickery by quoting it.&lt;/p&gt;</description>
+&lt;p&gt;Starting with the one I&amp;rsquo;m most excited about:&lt;/p&gt;
+&lt;h3 id=&#34;max-heap-314&#34;&gt;Max heap! (3.14)&lt;/h3&gt;
+&lt;p&gt;For a long time, Python only natively supports min heap. Users are sort of forced to play the trick
+to negate the value whenever we realised max heap is needed for the problem. This is very error-prone
+in that it is super easy to forget about the &amp;lsquo;-&amp;rsquo; sign on the way in or out.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Design Patterns in Python</title>

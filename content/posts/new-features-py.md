@@ -4,10 +4,33 @@ draft = false
 title = 'New Python Features 3.10 - 3.14'
 +++
 
-Starting from Python 3.10 released in Oct 2021 to Python 3.14 released last month, there are plenty of new features
+Starting from Python 3.10 (released Oct 2021) to Python 3.14 (released last month), there are quite a few new features
 added to the language that made it more intuitive to use.
 
-I want to put a summary here to remind myself to make full use of the modern Pythonic idioms.
+I want to put a summary here to remind myself and always try to make full use of the modern Pythonic idioms. 
+Starting with the one I'm most excited about:
+
+### Max heap! (3.14)
+
+For a long time, Python only natively supports min heap. Users are sort of forced to play the trick 
+to negate the value whenever we find max heap is needed for the problem. This is very error-prone
+in that it's super easy to forget about the '-' sign on the way in or out.
+
+Finally, we have the native max heap:
+
+```python
+from heapq import heapify_max, heappush_max, heappop_max
+
+arr = [5,7,2,4,8]
+heapify_max(arr)
+print(arr) # [8, 7, 2, 4, 5]
+
+points = []
+heappush_max(points, (2, 'b'))
+heappush_max(points, (1, 'a'))
+heappush_max(points, (3, 'c'))
+print(heappop_max(points)) # (3, 'c')
+```
 
 ### Deferred evaluation of annotation (3.14)
 
