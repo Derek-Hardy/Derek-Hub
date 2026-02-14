@@ -25,7 +25,7 @@ params:
       * 
       
       * My current project specialises in a Raft-based, API-driven **distributed scheduling platform** for batch workflows (think of Apache Airflow) 
-       that takes care of around 30 million firmwide job executions daily
+       that takes care of around 40 million firmwide job executions daily
       
       *
       
@@ -41,7 +41,7 @@ params:
       url: "https://www.linkedin.com/in/derekzhuang/"
     - name: Email
       title: Reach me via Email
-      url: "mailto:derekzxj@outlook.com"
+      url: "mailto:zxj.derek@gmail.com"
 
 menu:
   main:
