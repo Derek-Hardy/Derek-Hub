@@ -29,8 +29,10 @@ in that it&amp;rsquo;s super easy to forget about the &amp;lsquo;-&amp;rsquo; si
       <pubDate>Tue, 23 Sep 2025 19:00:53 +0800</pubDate>
       <guid>http://localhost:1313/posts/design-pattern-py/</guid>
       <description>&lt;p&gt;As a super flexible language, Python is blazing fast to build working prototypes and get the steam going.
-At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding style.&lt;/p&gt;
-&lt;p&gt;Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).&lt;/p&gt;</description>
+At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding
+style.&lt;/p&gt;
+&lt;p&gt;Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to
+work with (both for me and others).&lt;/p&gt;</description>
     </item>
     <item>
       <title>Productivity Boost in Git</title>

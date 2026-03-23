@@ -4,16 +4,19 @@ draft = false
 title = 'Design Patterns in Python'
 +++
 
-As a super flexible language, Python is blazing fast to build working prototypes and get the steam going. 
-At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding style.
+As a super flexible language, Python is blazing fast to build working prototypes and get the steam going.
+At the same time, it can also end up becoming a messy codebase and a pain to read later if being careless in the coding
+style.
 
-Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).
+Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to
+work with (both for me and others).
 
 ### Singleton
 
 It means only one instance of the class should exist during a program's lifetime.
 
 A refresher on the Python object creation process:
+
 * `__new__(cls)`: the very first step to allocate memory for the raw instance
 * `__init__(self)`: fills in the details (attributes) for the new instance object returned by the above step
 
@@ -23,18 +26,21 @@ Now, we want to have a shared cache object:
 import time
 
 class SingleCache:
-    _instance = None # class-level attribute
-    
+    _instance = None  # class-level attribute
+
     def __new__(cls):
-        # allocate new instance only when there isn't one; otherwise it reuses the same one
+        # allocate new instance only when there isn't one; 
+        # otherwise it reuses the same one
         if not cls._instance:
-            cls._instance = super().__new__(cls) # all class inherits from 'object'
+            # all class inherits from 'object'
+            cls._instance = super().__new__(cls)
             cls._instance._cache = {}
         return cls._instance
 
     def set(self, k, v, ttl=10):
         expiry = time.time() + ttl
-        self._cache[k] = (v, expiry) # self = cls._instance = obj returned by __new__()
+        # self = cls._instance = obj returned by __new__()
+        self._cache[k] = (v, expiry)
 
     def get(self, k):
         if k not in self._cache:
@@ -46,7 +52,8 @@ class SingleCache:
         return v
 ```
 
-Another thing to note, in Python, modules are imported once per interpreter. Every import just reuses the same module object.
+Another thing to note, in Python, modules are imported once per interpreter. Every import just reuses the same module
+object.
 So we can actually define the singleton object at the module level.
 
 ```python
@@ -64,20 +71,22 @@ from single_cache import SingleCache
 
 ### Decorator
 
-It is arguably the most Python-native design pattern more than anything else. 
+It is arguably the most Python-native design pattern more than anything else.
 The decorator wraps around the core function to add behaviours immediately before and after its execution.
 
-From my experience, it is most useful to add observability, caching and recovery mechanism around functions in the least disturbing way possible.
+From my experience, it is most useful to add observability, caching and recovery mechanism around functions in the least
+disturbing way possible.
 
 It looks self-explanatory in its minimal form:
 
 ```python
 def decorator(func):
-    def wrapper(*args, **kwargs): # just pass in positional & keyword arguments that func accepts
+    def wrapper(*args, **kwargs):  # just pass in positional & keyword arguments that func accepts
         print("set up before the func")
         result = func(*args, **kwargs)
         print("modifications after the func")
         return result
+
     return wrapper
 ```
 
@@ -97,6 +106,7 @@ def time_it(func):
         elapsed = time.time() - start
         print(f"{func.__name__} completed in {elapsed:.2f} seconds")
         return result
+
     return wrapper
 
 # now we use it
@@ -108,31 +118,55 @@ def slow_compute():
     return "done"
 ```
 
+We can also enable a class to be singleton using decorator:
+
+```python
+def singleton(cls):
+    instances = dict()
+    def get_instance(*args, **kwargs):
+        if cls not in instances:
+            instances[cls] = cls(*args, **kwargs)
+        return instances[cls]
+    return get_instance
+
+@singleton
+class Config:
+    ...
+```
+
 In fact, there are a lot of pre-built decorators we can just plug in and use:
-* `@timing`: measure function execution time
-* `@log_exceptions`: log exception with the function name
-* `@functools.lru_cache(maxsize=16)`: cache function results to be re-used for the same calling arguments
-* `@retry(times=3, delay=1)`: re-execute the function that might fail due to transient errors (e.g. rate limits)
-* `@singleton`: decorate around class definition to enforce only one instance is ever created
+
+|                        | Header 2                                                                                                    | 
+|------------------------|-------------------------------------------------------------------------------------------------------------|
+| `@property`            | turns a method in a class into read-only attribute                                                          | 
+| `@classmethod`         | takes in `cls` instead of `self` as the first argument; used for alternative constructor                    |
+| `@staticmethod`        | enables a regular function namespaced inside a class                                                        |
+| `@functools.lru_cache` | memoize function result to avoid redundant computations; optionally set `maxsize` to modify eviction policy |
+| `@dataclass`           | auto-generates `__init__`, `__eq__`, `__repr__` for user-defined class                                      |
+| `@abstracmethod`       | mark a method as abstract, forcing subclasses to implement it                                               |
 
 ### Iterator
 
-It allows us to traverse through a collection of elements sequentially without worrying about how the internal data structure looks like in order to do it.
+It allows us to traverse through a collection of elements sequentially without worrying about how the internal data
+structure looks like in order to do it.
 
 The pattern boils down to a protocol of 2 APIs:
+
 * `__iter__()`: return an iterator
 * `__next()`: return the next item, or raise `StopIteration` when we exhaust the collection
 
 Any object that implements the above two is an iterator. Any object that implements only `__iter__()` is an iterable.
 
 It might look natural that we traverse through a list using for-loop:
+
 ```python
 nums = [1, 2, 3]
 for n in nums:
-    print(n) # 1, 2, 3
+    print(n)  # 1, 2, 3
 ```
 
 And the for-loop syntax is actually interpreted as:
+
 ```python
 it = iter(nums)
 while True:
@@ -142,7 +176,8 @@ while True:
         break
 ```
 
-A practical use is when we want to process a huge log file, instead of loading everything in memory at once, we can design an iterator
+A practical use is when we want to process a huge log file, instead of loading everything in memory at once, we can
+design an iterator
 to load the data bit by bit for more efficient memory footprint.
 
 ```python
@@ -181,28 +216,30 @@ class BigFileIterator:
         return _line
 ```
 
-This is just an illustration of how lazy loading can be effective in dealing with large data using iterator. 
-In reality, it would be better to design such usage as a **context manager** where file handle is properly opened and closed upon enter and exit.
-
+This is just an illustration of how lazy loading can be effective in dealing with large data using iterator.
+In reality, it would be better to design such usage as a **context manager** where file handle is properly opened and
+closed upon enter and exit.
 
 ### Builder
 
-It allows us to construct complex objects with many optional parameters step by step instead of having a gigantic constructor or assigning attributes all over the place.
+It allows us to construct complex objects with many optional parameters step by step instead of having a gigantic
+constructor or assigning attributes all over the place.
 
-The builder uses method chaining to make the same task look cleaner and more extensible, and encourages immutability after creation.
+The builder uses method chaining to make the same task look cleaner and more extensible, and encourages immutability
+after creation.
 
 For instance, we want to build a custom HTTP client. It can be done in a very modular way:
 
 ```python
 from dataclasses import dataclass
 
-@dataclass # automatically generate __init__ method
+@dataclass  # automatically generate __init__ method
 class HttpClientConfig:
     base_url: str
     time_out: int
     retries: int
     headers: dict
-    
+
 class HttpClient:
     def __init__(self, config: HttpClientConfig):
         self._config = config
@@ -220,13 +257,13 @@ class HttpClientBuilder:
         self._time_out = None
         self._retries = None
         self._headers = None
-    
+
     def with_timeout(self, seconds: int):
         self._time_out = seconds
-    
+
     def with_retries(self, retries: int):
         self._retries = retries
-    
+
     def with_headers(self, headers: dict):
         self._headers = headers
 
@@ -242,7 +279,8 @@ class HttpClientBuilder:
 
 ### Observer
 
-Because functions are first-class in Python, it is easy to create a simple observer pattern to broadcast events to all interested components.
+Because functions are first-class in Python, it is easy to create a simple observer pattern to broadcast events to all
+interested components.
 
 ```python
 class Notification:
