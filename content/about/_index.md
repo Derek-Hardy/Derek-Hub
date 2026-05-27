@@ -1,8 +1,7 @@
 ## About me 🧑🏻‍💻
 
-I have been mostly hacking in **Python** and **Golang**, and appreciate both functional & object-oriented programming paradigms to solve real world engineering problems.
-
-Right now I'm a three-year experienced software engineer @ **Goldman Sachs**, focusing on building the firm's distributed scheduling platform for batch workflows.
+I'm an experienced software engineer @ **Goldman Sachs** and have been mostly hacking in **Python** and **Golang**.
+My current focus is on building the firm's distributed scheduling platform for batch workflows.
 
 ```text
 What is a scheduling platform?
