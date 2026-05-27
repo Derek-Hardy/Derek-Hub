@@ -165,6 +165,22 @@ that takes care of around 40 million firmwide job executions daily</p>
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">New Go Features 1.18 - 1.26
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>I started writing Go at GS with version 1.17, so 1.18 is roughly where “modern Go” begins for me.
+Since then, Go has added quite a few features that make day-to-day engineering work more pleasant. I will focus on the parts that affect normal backend/service code: concurrency, error handling, testing, collections, routing and tools.
+sync.WaitGroup.Go (1.25) Before Go 1.25, the common WaitGroup pattern looks like this:
+var wg sync.WaitGroup for _, job := range jobs { job := job wg.Add(1) go func() { defer wg.Done() process(job) }() } wg.Wait() This is not terrible, but it is easy to put Add in the wrong place or forget Done. The same boilerplate also appears in many places once a codebase has many goroutines.
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-05-26 12:30:00 +0800 +08'>May 26, 2026</span>&nbsp;·&nbsp;9 min</footer>
+  <a class="entry-link" aria-label="post link to New Go Features 1.18 - 1.26" href="http://localhost:1313/posts/new-go-features/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Python Pitfalls: Know Them Once, Avoid Them Forever
     </h2>
   </header>
@@ -293,22 +309,6 @@ With the great power of concurrency comes with the responsibility to handle sync
   </div>
   <footer class="entry-footer"><span title='2023-12-01 11:17:04 +0800 +08'>December 1, 2023</span>&nbsp;·&nbsp;3 min</footer>
   <a class="entry-link" aria-label="post link to Common Go channel uses" href="http://localhost:1313/posts/go-channel/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Built-in functions in Go
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>The builtins are functions in Golang that you can call directly without having to import any package; they just come with the programming language itself.
-The full list resides in the builtin standard library: https://pkg.go.dev/builtin
-Many of the builtin functions are widely used, so it’s important to know them by heart.
-The motivation for this post comes from the fact that Go 1.21.0 has introduced multiple new handy builtins (which doesn’t happen frequently).
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-11-29 11:17:04 +0800 +08'>November 29, 2023</span>&nbsp;·&nbsp;5 min</footer>
-  <a class="entry-link" aria-label="post link to Built-in functions in Go" href="http://localhost:1313/posts/go-built-in/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

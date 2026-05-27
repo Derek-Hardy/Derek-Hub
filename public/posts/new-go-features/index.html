@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>New Go Features 1.18 - 1.26 | Derek&#39;s Hub</title>
+<meta name="keywords" content="">
+<meta name="description" content="I started writing Go at GS with version 1.17, so 1.18 is roughly where &ldquo;modern Go&rdquo; begins for me.
+Since then, Go has added quite a few features that make day-to-day engineering work more pleasant.
+I will focus on the parts that affect normal backend/service code: concurrency, error handling, testing, collections, routing and tools.
+sync.WaitGroup.Go (1.25)
+Before Go 1.25, the common WaitGroup pattern looks like this:
+var wg sync.WaitGroup
+
+for _, job := range jobs {
+	job := job
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		process(job)
+	}()
+}
+
+wg.Wait()
+This is not terrible, but it is easy to put Add in the wrong place or forget Done.
+The same boilerplate also appears in many places once a codebase has many goroutines.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/posts/new-go-features/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.31a038ca4fe29d231a9edae8087cf7ea016d84e6abeb8663f248bda38b0d511b.css" integrity="sha256-MaA4yk/inSMantroCHz36gFthOar64Zj8ki9o4sNURs=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/new-go-features/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      New Go Features 1.18 - 1.26
+    </h1>
+    <div class="post-meta"><span title='2026-05-26 12:30:00 +0800 +08'>May 26, 2026</span>&nbsp;·&nbsp;9 min
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#syncwaitgroupgo-125" aria-label="sync.WaitGroup.Go (1.25)">sync.WaitGroup.Go (1.25)</a></li>
+                <li>
+                    <a href="#tool-directive-124" aria-label="tool directive (1.24)">tool directive (1.24)</a></li>
+                <li>
+                    <a href="#range-over-integers-and-better-httpservemux-122" aria-label="range over integers and better http.ServeMux (1.22)">range over integers and better http.ServeMux (1.22)</a></li>
+                <li>
+                    <a href="#slices-min-max-and-clear-121" aria-label="slices, min, max and clear (1.21)">slices, min, max and clear (1.21)</a></li>
+                <li>
+                    <a href="#errorsjoin-120" aria-label="errors.Join (1.20)">errors.Join (1.20)</a></li>
+                <li>
+                    <a href="#atomic-types-119" aria-label="Atomic types (1.19)">Atomic types (1.19)</a></li>
+                <li>
+                    <a href="#fuzzing-in-go-test-118" aria-label="Fuzzing in go test (1.18)">Fuzzing in go test (1.18)</a></li>
+                <li>
+                    <a href="#generics-and-library-adoption-118" aria-label="Generics and library adoption (1.18&#43;)">Generics and library adoption (1.18+)</a><ul>
+                        
+                <li>
+                    <a href="#functional-style" aria-label="Functional style">Functional style</a></li>
+                <li>
+                    <a href="#oop-ish-design" aria-label="OOP-ish design">OOP-ish design</a></li>
+                <li>
+                    <a href="#better-standard-library-adoption" aria-label="Better standard library adoption">Better standard library adoption</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>I started writing Go at GS with version <code>1.17</code>, so <code>1.18</code> is roughly where &ldquo;modern Go&rdquo; begins for me.</p>
+<p>Since then, Go has added quite a few features that make day-to-day engineering work more pleasant.
+I will focus on the parts that affect normal backend/service code: concurrency, error handling, testing, collections, routing and tools.</p>
+<h3 id="syncwaitgroupgo-125">sync.WaitGroup.Go (1.25)<a hidden class="anchor" aria-hidden="true" href="#syncwaitgroupgo-125">#</a></h3>
+<p>Before Go 1.25, the common <code>WaitGroup</code> pattern looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">job</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">jobs</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">job</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">job</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">process</span>(<span style="color:#a6e22e">job</span>)
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span></code></pre></div><p>This is not terrible, but it is easy to put <code>Add</code> in the wrong place or forget <code>Done</code>.
+The same boilerplate also appears in many places once a codebase has many goroutines.</p>
+<p>Go 1.25 added <code>WaitGroup.Go</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">job</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">jobs</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">job</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">job</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Go</span>(<span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">process</span>(<span style="color:#a6e22e">job</span>)
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span></code></pre></div><p>Conceptually, <code>wg.Go(fn)</code> means:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fn</span>()
+</span></span><span style="display:flex;"><span>}()
+</span></span></code></pre></div><p>It is a small feature, but it puts the usual structure directly into the API.</p>
+<p>One thing to remember: <code>WaitGroup</code> only waits. It does not collect errors or cancel sibling goroutines. If I need error propagation, I still prefer <code>errgroup</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">g</span>, <span style="color:#a6e22e">ctx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">errgroup</span>.<span style="color:#a6e22e">WithContext</span>(<span style="color:#a6e22e">ctx</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">job</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">jobs</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">job</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">job</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">Go</span>(<span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">process</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">job</span>)
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">Wait</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="tool-directive-124">tool directive (1.24)<a hidden class="anchor" aria-hidden="true" href="#tool-directive-124">#</a></h3>
+<p>This is a handy tooling improvement.</p>
+<p>Many Go projects depend on executable tools: linters, protobuf generators and so on. Before Go 1.24, a common workaround was to create a <code>tools.go</code> file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//go:build tools
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">tools</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span> <span style="color:#e6db74">&#34;google.golang.org/protobuf/cmd/protoc-gen-go&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span> <span style="color:#e6db74">&#34;google.golang.org/grpc/cmd/protoc-gen-go-grpc&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>The blank import keeps the tool in <code>go.mod</code>, but it is a little indirect. New joiners often need to ask why this file exists.</p>
+<p>Go 1.24 lets <code>go.mod</code> track executable dependencies directly with <code>tool</code> directives:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go get -tool google.golang.org/protobuf/cmd/protoc-gen-go
+</span></span><span style="display:flex;"><span>go get -tool google.golang.org/grpc/cmd/protoc-gen-go-grpc
+</span></span></code></pre></div><p>Then <code>go.mod</code> can contain something like:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#ae81ff">1.24</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">tool</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">google</span>.<span style="color:#a6e22e">golang</span>.<span style="color:#a6e22e">org</span><span style="color:#f92672">/</span><span style="color:#a6e22e">protobuf</span><span style="color:#f92672">/</span><span style="color:#a6e22e">cmd</span><span style="color:#f92672">/</span><span style="color:#a6e22e">protoc</span><span style="color:#f92672">-</span><span style="color:#a6e22e">gen</span><span style="color:#f92672">-</span><span style="color:#66d9ef">go</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">google</span>.<span style="color:#a6e22e">golang</span>.<span style="color:#a6e22e">org</span><span style="color:#f92672">/</span><span style="color:#a6e22e">grpc</span><span style="color:#f92672">/</span><span style="color:#a6e22e">cmd</span><span style="color:#f92672">/</span><span style="color:#a6e22e">protoc</span><span style="color:#f92672">-</span><span style="color:#a6e22e">gen</span><span style="color:#f92672">-</span><span style="color:#66d9ef">go</span><span style="color:#f92672">-</span><span style="color:#a6e22e">grpc</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>Now we can check the plugin versions through the Go toolchain:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go tool protoc-gen-go --version
+</span></span><span style="display:flex;"><span>go tool protoc-gen-go-grpc --version
+</span></span></code></pre></div><p>This is cleaner because executable dependencies are now first-class module metadata.</p>
+<h3 id="range-over-integers-and-better-httpservemux-122">range over integers and better http.ServeMux (1.22)<a hidden class="anchor" aria-hidden="true" href="#range-over-integers-and-better-httpservemux-122">#</a></h3>
+<p>Go 1.22 made two small changes that are easy to appreciate in everyday code.</p>
+<p>First, <code>for range</code> can now range over integers:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#ae81ff">5</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 4
+</span></span></span></code></pre></div><p>Before that, we would write the usual C-style loop:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">5</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The old form is still fine, especially when I need custom steps. But <code>range 5</code> is concise for &ldquo;repeat this N times&rdquo; or &ldquo;loop from 0 to N-1&rdquo;.</p>
+<p>For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">retry</span>(<span style="color:#a6e22e">times</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">fn</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">times</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">fn</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The same release also made <code>http.ServeMux</code> more useful.</p>
+<p>Previously, the standard library mux was quite basic, so many projects reached for <code>chi</code>, <code>gorilla/mux</code>, <code>gin</code>, or other routers. Go 1.22 added method matching and path wildcards:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;GET /users/{id}&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">id</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">PathValue</span>(<span style="color:#e6db74">&#34;id&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;get user %s&#34;</span>, <span style="color:#a6e22e">id</span>)
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;POST /users&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintln</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;create user&#34;</span>)
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#a6e22e">mux</span>)
+</span></span></code></pre></div><p>This makes the standard library good enough for many smaller services.</p>
+<p>I still tend to use a dedicated router when I need middleware groups. But for a small internal API, the standard <code>ServeMux</code> is now much more practical.</p>
+<h3 id="slices-min-max-and-clear-121">slices, min, max and clear (1.21)<a hidden class="anchor" aria-hidden="true" href="#slices-min-max-and-clear-121">#</a></h3>
+<p>Go 1.21 is probably the release I notice most often in normal application code.</p>
+<p>The new <code>slices</code> package collects many operations that people used to implement themselves.
+It helps to remove a lot of tiny helper functions from application code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">names</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;bob&#34;</span>, <span style="color:#e6db74">&#34;alice&#34;</span>, <span style="color:#e6db74">&#34;chris&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slices</span>.<span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">names</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">names</span>) <span style="color:#75715e">// [alice bob chris]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">slices</span>.<span style="color:#a6e22e">Contains</span>(<span style="color:#a6e22e">names</span>, <span style="color:#e6db74">&#34;alice&#34;</span>)) <span style="color:#75715e">// true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">slices</span>.<span style="color:#a6e22e">Index</span>(<span style="color:#a6e22e">names</span>, <span style="color:#e6db74">&#34;chris&#34;</span>))    <span style="color:#75715e">// 2
+</span></span></span></code></pre></div><p>It also works well with structs:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">User</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Name</span>  <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Score</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">users</span> <span style="color:#f92672">:=</span> []<span style="color:#a6e22e">User</span>{
+</span></span><span style="display:flex;"><span>	{<span style="color:#a6e22e">Name</span>: <span style="color:#e6db74">&#34;alice&#34;</span>, <span style="color:#a6e22e">Score</span>: <span style="color:#ae81ff">80</span>},
+</span></span><span style="display:flex;"><span>	{<span style="color:#a6e22e">Name</span>: <span style="color:#e6db74">&#34;bob&#34;</span>, <span style="color:#a6e22e">Score</span>: <span style="color:#ae81ff">95</span>},
+</span></span><span style="display:flex;"><span>	{<span style="color:#a6e22e">Name</span>: <span style="color:#e6db74">&#34;chris&#34;</span>, <span style="color:#a6e22e">Score</span>: <span style="color:#ae81ff">70</span>},
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slices</span>.<span style="color:#a6e22e">SortFunc</span>(<span style="color:#a6e22e">users</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#a6e22e">User</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">cmp</span>.<span style="color:#a6e22e">Compare</span>(<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Score</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">Score</span>) <span style="color:#75715e">// descending
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">users</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">Name</span>) <span style="color:#75715e">// bob
+</span></span></span></code></pre></div><p>This is a good example of generics improving the standard library. Before generics, <code>slices.SortFunc</code> could not exist in this form without losing type safety or relying on reflection.</p>
+<p>Go 1.21 also added <code>min</code>, <code>max</code>, and <code>clear</code> as builtins.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">lowest</span> <span style="color:#f92672">:=</span> min(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">8</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">highest</span> <span style="color:#f92672">:=</span> max(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">8</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">lowest</span>)  <span style="color:#75715e">// 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">highest</span>) <span style="color:#75715e">// 10
+</span></span></span></code></pre></div><p><code>clear</code> works on maps and slices:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">counts</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">int</span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;success&#34;</span>: <span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;failure&#34;</span>: <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>clear(<span style="color:#a6e22e">counts</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">counts</span>) <span style="color:#75715e">// map[]
+</span></span></span></code></pre></div><p>For slices, <code>clear</code> sets elements to their zero value but keeps the length:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>clear(<span style="color:#a6e22e">data</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">data</span>) <span style="color:#75715e">// [0 0 0]
+</span></span></span></code></pre></div><h3 id="errorsjoin-120">errors.Join (1.20)<a hidden class="anchor" aria-hidden="true" href="#errorsjoin-120">#</a></h3>
+<p>Before Go 1.20, error wrapping was mostly one error wrapping another error:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;load config: %w&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Sometimes multiple things can fail, and all of them are worth reporting. Cleanup is a classic example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">closeAll</span>(<span style="color:#a6e22e">db</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">sql</span>.<span style="color:#a6e22e">DB</span>, <span style="color:#a6e22e">cache</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Closer</span>, <span style="color:#a6e22e">logs</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Closer</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Join</span>(
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Close</span>(),
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">Close</span>(),
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">logs</span>.<span style="color:#a6e22e">Close</span>(),
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>errors.Join</code> returns one error that wraps multiple errors. <code>nil</code> errors are ignored, so this is convenient for cleanup paths.</p>
+<p>It also works with <code>errors.Is</code> and <code>errors.As</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Join</span>(
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;write audit log: %w&#34;</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">ErrPermission</span>),
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;close file: %w&#34;</span>, <span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">ErrClosed</span>),
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Is</span>(<span style="color:#a6e22e">err</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">ErrPermission</span>)) <span style="color:#75715e">// true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Is</span>(<span style="color:#a6e22e">err</span>, <span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">ErrClosed</span>))     <span style="color:#75715e">// true
+</span></span></span></code></pre></div><p>The conceptual change: an error can now represent a tree, not just a chain.</p>
+<h3 id="atomic-types-119">Atomic types (1.19)<a hidden class="anchor" aria-hidden="true" href="#atomic-types-119">#</a></h3>
+<p>Before Go 1.19, <code>sync/atomic</code> was mostly a set of functions:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">count</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">AddInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">count</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">LoadInt64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">count</span>))
+</span></span></code></pre></div><p>This works, but the raw variable is still visible. Someone can accidentally read or write it without using atomic operations.</p>
+<p>Go 1.19 added typed atomic values:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">count</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Int64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">count</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">count</span>.<span style="color:#a6e22e">Load</span>())
+</span></span></code></pre></div><p>Now the value is hidden behind methods, so the correct API is the natural one to use.</p>
+<p>A common use case is a counter:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Metrics</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">requests</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">failures</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Int64</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Metrics</span>) <span style="color:#a6e22e">Record</span>(<span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">requests</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">failures</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Metrics</span>) <span style="color:#a6e22e">Snapshot</span>() (<span style="color:#a6e22e">requests</span> <span style="color:#66d9ef">int64</span>, <span style="color:#a6e22e">failures</span> <span style="color:#66d9ef">int64</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">requests</span>.<span style="color:#a6e22e">Load</span>(), <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">failures</span>.<span style="color:#a6e22e">Load</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="fuzzing-in-go-test-118">Fuzzing in go test (1.18)<a hidden class="anchor" aria-hidden="true" href="#fuzzing-in-go-test-118">#</a></h3>
+<p>Fuzzing is a way to test code with generated inputs.</p>
+<p>Normal unit tests check the examples I can think of. Fuzzing checks examples I probably would not think of.</p>
+<p>A fuzz test starts with seed inputs, then the fuzzing engine mutates them to find crashes, panics, or invalid assumptions.</p>
+<p>For example, suppose I have a parser:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ParseUserID</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) (<span style="color:#66d9ef">int64</span>, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">s</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;empty user id&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseInt</span>(<span style="color:#a6e22e">s</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>I can fuzz it like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">FuzzParseUserID</span>(<span style="color:#a6e22e">f</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">F</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;1&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;12345&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;-1&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Fuzz</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">T</span>, <span style="color:#a6e22e">input</span> <span style="color:#66d9ef">string</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">id</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ParseUserID</span>(<span style="color:#a6e22e">input</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">id</span>, <span style="color:#ae81ff">10</span>) <span style="color:#f92672">!=</span> <span style="color:#a6e22e">input</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;round trip failed: input=%q id=%d&#34;</span>, <span style="color:#a6e22e">input</span>, <span style="color:#a6e22e">id</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Run the seed corpus like a normal test:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go test ./...
+</span></span></code></pre></div><p>Run fuzzing for a period of time:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go test -fuzz<span style="color:#f92672">=</span>FuzzParseUserID -fuzztime<span style="color:#f92672">=</span>30s
+</span></span></code></pre></div><p>For input-heavy code, it is a useful tool to have inside the standard <code>go test</code> workflow.</p>
+<h3 id="generics-and-library-adoption-118">Generics and library adoption (1.18+)<a hidden class="anchor" aria-hidden="true" href="#generics-and-library-adoption-118">#</a></h3>
+<p>Generics are the biggest language change in this period.</p>
+<p>Before Go 1.18, reusable code often had to choose between:</p>
+<ul>
+<li>writing the same logic for multiple concrete types</li>
+<li>using <code>interface{}</code> and type assertions</li>
+<li>using reflection</li>
+</ul>
+<p>Generics introduced type parameters, so we can write reusable code while keeping type safety.</p>
+<h4 id="functional-style">Functional style<a hidden class="anchor" aria-hidden="true" href="#functional-style">#</a></h4>
+<p>The most obvious use case is collection-style helpers.
+To keep the idea simple, here is a function that returns the first item matching a condition:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">First</span>[<span style="color:#a6e22e">T</span> <span style="color:#a6e22e">any</span>](<span style="color:#a6e22e">items</span> []<span style="color:#a6e22e">T</span>, <span style="color:#a6e22e">ok</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">T</span>) <span style="color:#66d9ef">bool</span>) (<span style="color:#a6e22e">T</span>, <span style="color:#66d9ef">bool</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">item</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">items</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>(<span style="color:#a6e22e">item</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">item</span>, <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">zero</span> <span style="color:#a6e22e">T</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">zero</span>, <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>There is only one type parameter here.
+If the input is <code>[]int</code>, <code>T</code> is <code>int</code>. If the input is <code>[]string</code>, <code>T</code> is <code>string</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">numbers</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">10</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">found</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">First</span>(<span style="color:#a6e22e">numbers</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">n</span> &gt; <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">found</span>) <span style="color:#75715e">// 8 true
+</span></span></span></code></pre></div><p>The same function also works for strings:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">names</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;alice&#34;</span>, <span style="color:#e6db74">&#34;bob&#34;</span>, <span style="color:#e6db74">&#34;chris&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">found</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">First</span>(<span style="color:#a6e22e">names</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">HasPrefix</span>(<span style="color:#a6e22e">name</span>, <span style="color:#e6db74">&#34;c&#34;</span>)
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">found</span>) <span style="color:#75715e">// chris true
+</span></span></span></code></pre></div><p>This looks natural if you come from Python or Java streams. In Go, I still try not to overdo it. A plain <code>for</code> loop is often clearer.</p>
+<p>But for small reusable search/filter/transform helpers, generics are quite handy.</p>
+<h4 id="oop-ish-design">OOP-ish design<a hidden class="anchor" aria-hidden="true" href="#oop-ish-design">#</a></h4>
+<p>Go is not a classical OOP language, but it has structs, methods and interfaces. Generics can make reusable typed containers cleaner.</p>
+<p>For example, a typed cache:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Cache</span>[<span style="color:#a6e22e">K</span> <span style="color:#a6e22e">comparable</span>, <span style="color:#a6e22e">V</span> <span style="color:#a6e22e">any</span>] <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mu</span>   <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">map</span>[<span style="color:#a6e22e">K</span>]<span style="color:#a6e22e">V</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCache</span>[<span style="color:#a6e22e">K</span> <span style="color:#a6e22e">comparable</span>, <span style="color:#a6e22e">V</span> <span style="color:#a6e22e">any</span>]() <span style="color:#f92672">*</span><span style="color:#a6e22e">Cache</span>[<span style="color:#a6e22e">K</span>, <span style="color:#a6e22e">V</span>] {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Cache</span>[<span style="color:#a6e22e">K</span>, <span style="color:#a6e22e">V</span>]{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">data</span>: make(<span style="color:#66d9ef">map</span>[<span style="color:#a6e22e">K</span>]<span style="color:#a6e22e">V</span>),
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Cache</span>[<span style="color:#a6e22e">K</span>, <span style="color:#a6e22e">V</span>]) <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">key</span> <span style="color:#a6e22e">K</span>) (<span style="color:#a6e22e">V</span>, <span style="color:#66d9ef">bool</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">data</span>[<span style="color:#a6e22e">key</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">ok</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Cache</span>[<span style="color:#a6e22e">K</span>, <span style="color:#a6e22e">V</span>]) <span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">key</span> <span style="color:#a6e22e">K</span>, <span style="color:#a6e22e">value</span> <span style="color:#a6e22e">V</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">data</span>[<span style="color:#a6e22e">key</span>] = <span style="color:#a6e22e">value</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Now the cache is reusable but still typed:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">users</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewCache</span>[<span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">User</span>]()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">users</span>.<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;u-123&#34;</span>, <span style="color:#a6e22e">User</span>{<span style="color:#a6e22e">Name</span>: <span style="color:#e6db74">&#34;alice&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">user</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">users</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;u-123&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">Name</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="better-standard-library-adoption">Better standard library adoption<a hidden class="anchor" aria-hidden="true" href="#better-standard-library-adoption">#</a></h4>
+<p>The useful part is that generics did not stay only as a language feature. Later standard library packages adopted it.</p>
+<p>Before <code>slices</code>, I might write a small helper for every concrete type:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ContainsInt64</span>(<span style="color:#a6e22e">items</span> []<span style="color:#66d9ef">int64</span>, <span style="color:#a6e22e">target</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">item</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">items</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">item</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">target</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ContainsString</span>(<span style="color:#a6e22e">items</span> []<span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">target</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">item</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">items</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">item</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">target</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The logic is exactly the same, but the types are different. This kind of helper is small, but it quietly spreads across a codebase.</p>
+<p>With <code>slices.Contains</code>, the standard library can express that shared logic once:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">ids</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int64</span>{<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">names</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;alice&#34;</span>, <span style="color:#e6db74">&#34;bob&#34;</span>, <span style="color:#e6db74">&#34;chris&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">slices</span>.<span style="color:#a6e22e">Contains</span>(<span style="color:#a6e22e">ids</span>, int64(<span style="color:#ae81ff">2</span>)))      <span style="color:#75715e">// true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">slices</span>.<span style="color:#a6e22e">Contains</span>(<span style="color:#a6e22e">names</span>, <span style="color:#e6db74">&#34;derek&#34;</span>))     <span style="color:#75715e">// false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">slices</span>.<span style="color:#a6e22e">Index</span>(<span style="color:#a6e22e">names</span>, <span style="color:#e6db74">&#34;chris&#34;</span>))        <span style="color:#75715e">// 2
+</span></span></span></code></pre></div><p>It also works for ordering:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">ids</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int64</span>{<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slices</span>.<span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">ids</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">ids</span>) <span style="color:#75715e">// [1 2 3]
+</span></span></span></code></pre></div><p><code>slices</code>, <code>maps</code> and <code>cmp</code> are good examples of generic library design. They made common helpers type-safe and reusable without each project inventing its own utility package.</p>
+<p>My current takeaway is:</p>
+<ul>
+<li>use generics for containers, algorithms and type-safe reusable helpers</li>
+<li>avoid forcing generics into business logic where a normal interface or simple function is clearer</li>
+<li>prefer standard library generic helpers before writing my own</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://localhost:1313/posts/python-trivia/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Python Pitfalls: Know Them Once, Avoid Them Forever</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>© <a href="https://github.com/adityatelange/hugo-PaperMod/graphs/contributors">PaperMod Contributors</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

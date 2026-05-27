@@ -12,6 +12,10 @@ description: Use this skill when drafting, editing, or extending posts for Derek
 - Prefer "I want to put down a summary", "From my experience", "I find", "I think", and similar direct personal framing.
 - Make technical judgment visible: explain what is useful in production, what is rarely used, what feels error-prone, or what is worth remembering.
 - Keep the tone friendly and occasionally conversational, with light asides when natural.
+- Prefer casual British/common wording when adding personality. Words like "gotcha", "boilerplate", "fiddly", "awkward", "handy", "quite", and "worth noting" fit better than colourful American engineering slang.
+- Avoid slang such as "footgun" and overly stylised phrases such as "ceremony" unless they already appear in the user's draft.
+- For a natural British tone, keep enthusiasm understated. Prefer "quite useful", "handy", "a bit awkward", "worth noting", and "I tend to" over punchier phrasing like "really nice", "super useful", or "I love this".
+- Keep explanation paragraphs compact. If a paragraph only introduces the next code block, make it a short sentence rather than a mini-summary.
 
 ## Common Post Shape
 
@@ -45,7 +49,7 @@ For longer walkthroughs, `##` sections are acceptable, as in the HTTP post. For 
 - Use language labels such as `go`, `python`, `python3`, `java`, `shell`, `bash`, and `text`.
 - Prefer small runnable or near-runnable snippets over pseudocode.
 - Add inline comments to explain the important line, especially where syntax may be surprising.
-- Show the older or clumsier approach first when the post is about a newer improvement.
+- Show the older or more awkward approach first when the post is about a newer improvement.
 - For larger code examples, use the existing Hugo shortcode:
 
 ````markdown
