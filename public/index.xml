@@ -7,8 +7,17 @@
     <generator>Hugo -- 0.139.0</generator>
     <language>en</language>
     <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate>Sun, 02 Nov 2025 15:18:31 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 07 Mar 2026 16:58:35 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python Pitfalls: Know Them Once, Avoid Them Forever</title>
+      <link>http://localhost:1313/posts/python-trivia/</link>
+      <pubDate>Sat, 07 Mar 2026 16:58:35 +0800</pubDate>
+      <guid>http://localhost:1313/posts/python-trivia/</guid>
+      <description>&lt;p&gt;Python is very intuitive to write but some behaviours are subtle enough that they can quietly turn into bugs if I don&amp;rsquo;t keep them in mind.&lt;/p&gt;
+&lt;p&gt;Put down a summary here for the Python pitfalls that I find most practical to remember.
+Most of them are not really &amp;ldquo;weird&amp;rdquo; once we understand the language rule behind it, but they are exactly the kind of details that can bite in debugging.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>New Python Features 3.10 - 3.14</title>
       <link>http://localhost:1313/posts/new-features-py/</link>

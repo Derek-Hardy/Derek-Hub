@@ -3,12 +3,15 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2025-11-02T15:18:31+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/new-features-py/</loc>
-    <lastmod>2025-11-02T15:18:31+08:00</lastmod>
+    <lastmod>2026-03-07T16:58:35+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2026-03-07T16:58:35+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/python-trivia/</loc>
+    <lastmod>2026-03-07T16:58:35+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/new-features-py/</loc>
     <lastmod>2025-11-02T15:18:31+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/design-pattern-py/</loc>

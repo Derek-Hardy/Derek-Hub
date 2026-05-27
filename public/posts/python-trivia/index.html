@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Python Pitfalls: Know Them Once, Avoid Them Forever | Derek&#39;s Hub</title>
+<meta name="keywords" content="">
+<meta name="description" content="Python is very intuitive to write but some behaviours are subtle enough that they can quietly turn into bugs if I don&rsquo;t keep them in mind.
+Put down a summary here for the Python pitfalls that I find most practical to remember.
+Most of them are not really &ldquo;weird&rdquo; once we understand the language rule behind it, but they are exactly the kind of details that can bite in debugging.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/posts/python-trivia/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.31a038ca4fe29d231a9edae8087cf7ea016d84e6abeb8663f248bda38b0d511b.css" integrity="sha256-MaA4yk/inSMantroCHz36gFthOar64Zj8ki9o4sNURs=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/python-trivia/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="Derek&#39;s Hub (Alt + H)">Derek&#39;s Hub</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Python Pitfalls: Know Them Once, Avoid Them Forever
+    </h1>
+    <div class="post-meta"><span title='2026-03-07 16:58:35 +0800 +08'>March 7, 2026</span>&nbsp;·&nbsp;6 min
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#late-binding-in-closures" aria-label="Late binding in closures">Late binding in closures</a></li>
+                <li>
+                    <a href="#mutable-default-arguments" aria-label="Mutable default arguments">Mutable default arguments</a></li>
+                <li>
+                    <a href="#class-attribute-shared-across-instances" aria-label="Class attribute shared across instances">Class attribute shared across instances</a></li>
+                <li>
+                    <a href="#assignment-is-alias-not-copy" aria-label="Assignment is alias, not copy">Assignment is alias, not copy</a></li>
+                <li>
+                    <a href="#list-multiplication-with-nested-lists" aria-label="List multiplication with nested lists">List multiplication with nested lists</a></li>
+                <li>
+                    <a href="#scope-is-decided-at-compile-time" aria-label="Scope is decided at compile time">Scope is decided at compile time</a></li>
+                <li>
+                    <a href="#loop-variables-leak" aria-label="Loop variables leak">Loop variables leak</a></li>
+                <li>
+                    <a href="#floating-point-comparison" aria-label="Floating point comparison">Floating point comparison</a></li>
+                <li>
+                    <a href="#empty-any-and-all" aria-label="Empty any() and all()">Empty any() and all()</a></li>
+                <li>
+                    <a href="#finally-can-override-return-and-exceptions" aria-label="finally can override return and exceptions">finally can override return and exceptions</a></li>
+                <li>
+                    <a href="#unpacking-is-practical" aria-label="Unpacking is practical">Unpacking is practical</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Python is very intuitive to write but some behaviours are subtle enough that they can quietly turn into bugs if I don&rsquo;t keep them in mind.</p>
+<p>Put down a summary here for the Python pitfalls that I find most practical to remember.
+Most of them are not really &ldquo;weird&rdquo; once we understand the language rule behind it, but they are exactly the kind of details that can bite in debugging.</p>
+<h3 id="late-binding-in-closures">Late binding in closures<a hidden class="anchor" aria-hidden="true" href="#late-binding-in-closures">#</a></h3>
+<p>Closure means a function can still refer to variables from the place where it is defined, even after that surrounding code has finished running.</p>
+<p>In the below example, each <code>lambda</code> is a tiny function created inside the loop.
+The variable <code>i</code> is not defined inside the <code>lambda</code> itself, so Python will look it up from the surrounding scope when the <code>lambda</code> runs.</p>
+<p>The tricky part is that Python captures the variable name, not the value at the time the function is defined.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>funcs <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">5</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># each lambda looks up i only when it is called</span>
+</span></span><span style="display:flex;"><span>    funcs<span style="color:#f92672">.</span>append(<span style="color:#66d9ef">lambda</span>: i)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print([f() <span style="color:#66d9ef">for</span> f <span style="color:#f92672">in</span> funcs])  <span style="color:#75715e"># [4, 4, 4, 4, 4]</span>
+</span></span></code></pre></div><p>All lambdas end up using the final value of <code>i</code>, because the loop does not create a new scope for each iteration.</p>
+<p>The usual fix is to force evaluation at definition time with a default argument:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>funcs <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">5</span>):
+</span></span><span style="display:flex;"><span>    funcs<span style="color:#f92672">.</span>append(<span style="color:#66d9ef">lambda</span> i<span style="color:#f92672">=</span>i: i)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print([f() <span style="color:#66d9ef">for</span> f <span style="color:#f92672">in</span> funcs])  <span style="color:#75715e"># [0, 1, 2, 3, 4]</span>
+</span></span></code></pre></div><h3 id="mutable-default-arguments">Mutable default arguments<a hidden class="anchor" aria-hidden="true" href="#mutable-default-arguments">#</a></h3>
+<p>Function default arguments are evaluated once when the function is defined, not every time the function is called.</p>
+<p>So if the default value is mutable, it can accidentally become shared state.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(val, data<span style="color:#f92672">=</span>[]):
+</span></span><span style="display:flex;"><span>    data<span style="color:#f92672">.</span>append(val)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> data
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(add(<span style="color:#ae81ff">1</span>))  <span style="color:#75715e"># [1]</span>
+</span></span><span style="display:flex;"><span>print(add(<span style="color:#ae81ff">2</span>))  <span style="color:#75715e"># [1, 2]</span>
+</span></span></code></pre></div><p>This is almost never what I want from a helper function. The safer pattern is to use <code>None</code> as a sentinel value:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(val, data<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> data <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        data <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    data<span style="color:#f92672">.</span>append(val)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> data
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(add(<span style="color:#ae81ff">1</span>))  <span style="color:#75715e"># [1]</span>
+</span></span><span style="display:flex;"><span>print(add(<span style="color:#ae81ff">2</span>))  <span style="color:#75715e"># [2]</span>
+</span></span></code></pre></div><h3 id="class-attribute-shared-across-instances">Class attribute shared across instances<a hidden class="anchor" aria-hidden="true" href="#class-attribute-shared-across-instances">#</a></h3>
+<p>Class attributes are shared by all instances unless an instance shadows the attribute.</p>
+<p>That is perfectly fine for constants, but pretty dangerous for mutable containers.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RequestTracker</span>:
+</span></span><span style="display:flex;"><span>    recent_paths <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">record</span>(self, path):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>recent_paths<span style="color:#f92672">.</span>append(path)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>user_api <span style="color:#f92672">=</span> RequestTracker()
+</span></span><span style="display:flex;"><span>payment_api <span style="color:#f92672">=</span> RequestTracker()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>user_api<span style="color:#f92672">.</span>record(<span style="color:#e6db74">&#34;/users/123&#34;</span>)
+</span></span><span style="display:flex;"><span>payment_api<span style="color:#f92672">.</span>record(<span style="color:#e6db74">&#34;/payments/abc&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(user_api<span style="color:#f92672">.</span>recent_paths)     <span style="color:#75715e"># [&#39;/users/123&#39;, &#39;/payments/abc&#39;]</span>
+</span></span><span style="display:flex;"><span>print(payment_api<span style="color:#f92672">.</span>recent_paths)  <span style="color:#75715e"># [&#39;/users/123&#39;, &#39;/payments/abc&#39;]</span>
+</span></span></code></pre></div><p>In most cases, the list should live on the instance instead:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RequestTracker</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>recent_paths <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">record</span>(self, path):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>recent_paths<span style="color:#f92672">.</span>append(path)
+</span></span></code></pre></div><p>Dataclasses are quite helpful here because they explicitly reject mutable literal defaults.
+The intended pattern is <code>default_factory</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> dataclasses <span style="color:#f92672">import</span> dataclass, field
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@dataclass</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Test</span>:
+</span></span><span style="display:flex;"><span>    data: list <span style="color:#f92672">=</span> field(default_factory<span style="color:#f92672">=</span>list)
+</span></span></code></pre></div><h3 id="assignment-is-alias-not-copy">Assignment is alias, not copy<a hidden class="anchor" aria-hidden="true" href="#assignment-is-alias-not-copy">#</a></h3>
+<p>This one is probably the most important Python habit to internalise.
+Assignment binds a name to an object; it does not copy the object.</p>
+<p>Even when we copy a list with slicing, it is still only a shallow copy.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>x <span style="color:#f92672">=</span> [[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>], [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>]]
+</span></span><span style="display:flex;"><span>y <span style="color:#f92672">=</span> x[:]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>y[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>append(<span style="color:#ae81ff">999</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(x)  <span style="color:#75715e"># [[1, 2, 999], [3, 4]]</span>
+</span></span><span style="display:flex;"><span>print(y)  <span style="color:#75715e"># [[1, 2, 999], [3, 4]]</span>
+</span></span></code></pre></div><p>The outer list is copied, but the inner lists are still the same objects.
+If we need the whole nested structure to be independent, use <code>copy.deepcopy</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> copy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> [[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>], [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>]]
+</span></span><span style="display:flex;"><span>y <span style="color:#f92672">=</span> copy<span style="color:#f92672">.</span>deepcopy(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>y[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>append(<span style="color:#ae81ff">999</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(x)  <span style="color:#75715e"># [[1, 2], [3, 4]]</span>
+</span></span><span style="display:flex;"><span>print(y)  <span style="color:#75715e"># [[1, 2, 999], [3, 4]]</span>
+</span></span></code></pre></div><p>It is not that deep copy should be used everywhere.
+It is more that I should be very clear whether I am copying the container, the elements, or both.</p>
+<h3 id="list-multiplication-with-nested-lists">List multiplication with nested lists<a hidden class="anchor" aria-hidden="true" href="#list-multiplication-with-nested-lists">#</a></h3>
+<p>This is another version of the same reference issue.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>grid <span style="color:#f92672">=</span> [[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>grid[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(grid)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># [[1, 0, 0], [1, 0, 0], [1, 0, 0]]</span>
+</span></span></code></pre></div><p>The inner list is created once and reused three times.</p>
+<p>The safer way is to create each row independently:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>grid <span style="color:#f92672">=</span> [[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span> <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)]
+</span></span><span style="display:flex;"><span>grid[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(grid)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># [[1, 0, 0], [0, 0, 0], [0, 0, 0]]</span>
+</span></span></code></pre></div><h3 id="scope-is-decided-at-compile-time">Scope is decided at compile time<a hidden class="anchor" aria-hidden="true" href="#scope-is-decided-at-compile-time">#</a></h3>
+<p>Python decides whether a name is local by looking at the whole function body.
+If there is an assignment to the name anywhere inside the function, Python treats it as local unless we say otherwise.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>x <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">inc</span>():
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>inc()  <span style="color:#75715e"># UnboundLocalError: cannot access local variable &#39;x&#39;</span>
+</span></span></code></pre></div><p>It may look like <code>x += 1</code> should read the global variable first, but the assignment makes <code>x</code> a local name for the whole function.</p>
+<p>If we really want to modify the global binding, we can say it explicitly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>x <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">inc</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">global</span> x
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(inc())  <span style="color:#75715e"># 11</span>
+</span></span><span style="display:flex;"><span>print(inc())  <span style="color:#75715e"># 12</span>
+</span></span></code></pre></div><p>For nested functions, <code>nonlocal</code> binds to the nearest enclosing function scope.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>():
+</span></span><span style="display:flex;"><span>    count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">inc</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># without nonlocal, count += 1 would make count local to inc</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># and Python would complain before it can read the outer count</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">nonlocal</span> count
+</span></span><span style="display:flex;"><span>        count <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> count
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(inc())  <span style="color:#75715e"># 1</span>
+</span></span><span style="display:flex;"><span>    print(inc())  <span style="color:#75715e"># 2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>run()
+</span></span></code></pre></div><h3 id="loop-variables-leak">Loop variables leak<a hidden class="anchor" aria-hidden="true" href="#loop-variables-leak">#</a></h3>
+<p>Regular <code>for</code> loops do not create their own scope.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(j)  <span style="color:#75715e"># 2</span>
+</span></span></code></pre></div><p>The loop variable remains available after the loop finishes.</p>
+<p>List comprehensions behave differently in Python 3:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>j <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;outer value&#34;</span>
+</span></span><span style="display:flex;"><span>_ <span style="color:#f92672">=</span> [j <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(j)  <span style="color:#75715e"># outer value</span>
+</span></span></code></pre></div><p>This difference is small, but it explains why loop-related closure bugs can be surprising if we mentally assume every iteration owns a fresh scope.</p>
+<h3 id="floating-point-comparison">Floating point comparison<a hidden class="anchor" aria-hidden="true" href="#floating-point-comparison">#</a></h3>
+<p>Decimal values like <code>0.1</code> cannot always be represented exactly in binary floating point.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print(<span style="color:#ae81ff">0.1</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.1</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.1</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0.3</span>)  <span style="color:#75715e"># False</span>
+</span></span></code></pre></div><p>For practical comparison, use <code>math.isclose</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> math
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(math<span style="color:#f92672">.</span>isclose(<span style="color:#ae81ff">0.1</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.1</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.1</span>, <span style="color:#ae81ff">0.3</span>))  <span style="color:#75715e"># True</span>
+</span></span></code></pre></div><h3 id="empty-any-and-all">Empty any() and all()<a hidden class="anchor" aria-hidden="true" href="#empty-any-and-all">#</a></h3>
+<p>The behaviour of <code>any</code> and <code>all</code> on empty iterables can be unintuitive at first.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print(any([]))  <span style="color:#75715e"># False</span>
+</span></span><span style="display:flex;"><span>print(all([]))  <span style="color:#75715e"># True</span>
+</span></span></code></pre></div><p>I find it easier to think of them as loops that stop early.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">my_any</span>(values):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> v <span style="color:#f92672">in</span> values:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> v:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">my_all</span>(values):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> v <span style="color:#f92672">in</span> values:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> v:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span></code></pre></div><p>For <code>any([])</code>, the loop never finds a truthy value, so it returns <code>False</code>.
+For <code>all([])</code>, the loop never finds a falsy value, so it returns <code>True</code>.</p>
+<p>That is why an empty list can accidentally pass a validation like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>scores <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(all(score <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">60</span> <span style="color:#66d9ef">for</span> score <span style="color:#f92672">in</span> scores))  <span style="color:#75715e"># True</span>
+</span></span></code></pre></div><p>This matters when filtering collections.
+If an empty list should be treated as invalid input, it is better to check emptiness directly before using <code>all</code>.</p>
+<h3 id="finally-can-override-return-and-exceptions">finally can override return and exceptions<a hidden class="anchor" aria-hidden="true" href="#finally-can-override-return-and-exceptions">#</a></h3>
+<p><code>finally</code> is guaranteed to run, which makes it a good place for cleanup.
+However, returning from <code>finally</code> can hide what happened in <code>try</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">finally</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">42</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(f())  <span style="color:#75715e"># 42</span>
+</span></span></code></pre></div><p>The <code>ZeroDivisionError</code> is discarded.</p>
+<p>It can also override a normal return:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">g</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;try&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">finally</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;finally&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(g())  <span style="color:#75715e"># finally</span>
+</span></span></code></pre></div><p>So my rule is simple: use <code>finally</code> for cleanup, not for deciding the function result.
+If cleanup needs to be structured, a context manager is usually clearer.</p>
+<h3 id="unpacking-is-practical">Unpacking is practical<a hidden class="anchor" aria-hidden="true" href="#unpacking-is-practical">#</a></h3>
+<p>Not all Python trivia is a trap.
+Some features are just handy to remember.</p>
+<p>Extended unpacking is one of them:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>a, <span style="color:#f92672">*</span>b <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(a)  <span style="color:#75715e"># 1</span>
+</span></span><span style="display:flex;"><span>print(b)  <span style="color:#75715e"># [2, 3]</span>
+</span></span></code></pre></div><p>It also works nicely when I only care about the first or last few values:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>head, <span style="color:#f92672">*</span>middle, tail <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(head)    <span style="color:#75715e"># 1</span>
+</span></span><span style="display:flex;"><span>print(middle)  <span style="color:#75715e"># [2, 3, 4]</span>
+</span></span><span style="display:flex;"><span>print(tail)    <span style="color:#75715e"># 5</span>
+</span></span></code></pre></div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://localhost:1313/posts/new-features-py/">
+    <span class="title">Next »</span>
+    <br>
+    <span>New Python Features 3.10 - 3.14</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>© <a href="https://github.com/adityatelange/hugo-PaperMod/graphs/contributors">PaperMod Contributors</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
