@@ -121,6 +121,22 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">New Go Features 1.18 - 1.26
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>I started writing Go at GS with version 1.17, so 1.18 is roughly where “modern Go” begins for me.
+Since then, Go has added quite a few features that make day-to-day engineering work more pleasant. I will focus on the parts that affect normal backend/service code: concurrency, error handling, testing, collections, routing and tools.
+sync.WaitGroup.Go (1.25) Before Go 1.25, the common WaitGroup pattern looks like this:
+var wg sync.WaitGroup for _, job := range jobs { job := job wg.Add(1) go func() { defer wg.Done() process(job) }() } wg.Wait() This is not terrible, but it is easy to put Add in the wrong place or forget Done. The same boilerplate also appears in many places once a codebase has many goroutines.
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-05-26 12:30:00 +0800 HKT'>May 26, 2026</span>&nbsp;·&nbsp;9 min</footer>
+  <a class="entry-link" aria-label="post link to New Go Features 1.18 - 1.26" href="http://localhost:1313/posts/new-go-features/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Python Pitfalls: Know Them Once, Avoid Them Forever
     </h2>
   </header>
@@ -129,7 +145,7 @@
 Put down a summary here for the Python pitfalls that I find most practical to remember. Most of them are not really “weird” once we understand the language rule behind it, but they are exactly the kind of details that can bite in debugging.
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2026-03-07 16:58:35 +0800 +08'>March 7, 2026</span>&nbsp;·&nbsp;6 min</footer>
+  <footer class="entry-footer"><span title='2026-03-07 16:58:35 +0800 HKT'>March 7, 2026</span>&nbsp;·&nbsp;6 min</footer>
   <a class="entry-link" aria-label="post link to Python Pitfalls: Know Them Once, Avoid Them Forever" href="http://localhost:1313/posts/python-trivia/"></a>
 </article>
 
@@ -144,7 +160,7 @@ I want to put a summary here to remind myself and always try to make full use of
 Max heap! (3.14) For a long time, Python only natively supports min heap. Users are sort of forced to play the trick to negate the value whenever we find max heap is needed for the problem. This is very error-prone in that it’s super easy to forget about the ‘-’ sign on the way in or out.
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2025-11-02 15:18:31 +0800 +08'>November 2, 2025</span>&nbsp;·&nbsp;4 min</footer>
+  <footer class="entry-footer"><span title='2025-11-02 15:18:31 +0800 HKT'>November 2, 2025</span>&nbsp;·&nbsp;4 min</footer>
   <a class="entry-link" aria-label="post link to New Python Features 3.10 - 3.14" href="http://localhost:1313/posts/new-features-py/"></a>
 </article>
 
@@ -158,7 +174,7 @@ Max heap! (3.14) For a long time, Python only natively supports min heap. Users 
 Therefore, I would always prefer to look out for idiomatic patterns to keep the Python code maintainable and easy to work with (both for me and others).
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2025-09-23 19:00:53 +0800 +08'>September 23, 2025</span>&nbsp;·&nbsp;6 min</footer>
+  <footer class="entry-footer"><span title='2025-09-23 19:00:53 +0800 HKT'>September 23, 2025</span>&nbsp;·&nbsp;6 min</footer>
   <a class="entry-link" aria-label="post link to Design Patterns in Python" href="http://localhost:1313/posts/design-pattern-py/"></a>
 </article>
 
@@ -173,7 +189,7 @@ Making changes I started using specialised git switch command for branch operati
 # switch to a new local branch git switch -c &lt;branch-name&gt; # switch to an existing local branch git switch &lt;branch-name&gt; # switch to the last branch I was at git switch - # switch to remote branch: # it auto-creates the local branch of the same name if not exist and tracks the given remote branch; all in one! git switch &lt;remote-branch-name&gt; The only time I still use git checkout is for file restoration:
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2025-07-20 12:09:55 +0800 +08'>July 20, 2025</span>&nbsp;·&nbsp;3 min</footer>
+  <footer class="entry-footer"><span title='2025-07-20 12:09:55 +0800 HKT'>July 20, 2025</span>&nbsp;·&nbsp;3 min</footer>
   <a class="entry-link" aria-label="post link to Productivity Boost in Git" href="http://localhost:1313/posts/git-productivity/"></a>
 </article>
 
@@ -187,7 +203,7 @@ Making changes I started using specialised git switch command for branch operati
 In fact, this is part of the motivation in designing Golang, as one of the authors commented about older programming languages in the keynote talk Go at Google: Language Design in the Service of Software Engineering
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2024-03-09 22:35:17 +0800 +08'>March 9, 2024</span>&nbsp;·&nbsp;8 min</footer>
+  <footer class="entry-footer"><span title='2024-03-09 22:35:17 +0800 HKT'>March 9, 2024</span>&nbsp;·&nbsp;8 min</footer>
   <a class="entry-link" aria-label="post link to Bits and pieces of HTTP in Go" href="http://localhost:1313/posts/go-http/"></a>
 </article>
 
@@ -202,7 +218,7 @@ It gives more flexibility for user to create a general collection for similar da
 The syntax can look a bit strange if you are already used to the old-school Go code. Or maybe it’s just because I haven’t used it often enough.
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2024-02-16 21:39:17 +0800 +08'>February 16, 2024</span>&nbsp;·&nbsp;4 min</footer>
+  <footer class="entry-footer"><span title='2024-02-16 21:39:17 +0800 HKT'>February 16, 2024</span>&nbsp;·&nbsp;4 min</footer>
   <a class="entry-link" aria-label="post link to A peek into Go Generics" href="http://localhost:1313/posts/go-generics/"></a>
 </article>
 
@@ -216,7 +232,7 @@ The syntax can look a bit strange if you are already used to the old-school Go c
 However, besides the basic map and slice, Go does come with a builtin container package that we should at least be aware and make use of it to implement things like Stack, Queue, PriorityQueue and Deque.
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2023-12-17 15:02:58 +0800 +08'>December 17, 2023</span>&nbsp;·&nbsp;4 min</footer>
+  <footer class="entry-footer"><span title='2023-12-17 15:02:58 +0800 HKT'>December 17, 2023</span>&nbsp;·&nbsp;4 min</footer>
   <a class="entry-link" aria-label="post link to Data Structure in Go - Part 2" href="http://localhost:1313/posts/data-structure-2/"></a>
 </article>
 
@@ -232,7 +248,7 @@ Besides the basic ones in Go, there are alias types that just provide more meani
 Alias type Underlying type Why? rune int32 represent a Unicode character byte uint8 represent one byte (8 bits) of data int int32 / int64 adjusted for the system (32 bit / 64 bit) We can also define custom alias type:
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2023-12-05 20:28:17 +0800 +08'>December 5, 2023</span>&nbsp;·&nbsp;3 min</footer>
+  <footer class="entry-footer"><span title='2023-12-05 20:28:17 +0800 HKT'>December 5, 2023</span>&nbsp;·&nbsp;3 min</footer>
   <a class="entry-link" aria-label="post link to Data Structure in Go - Part 1" href="http://localhost:1313/posts/data-structure-1/"></a>
 </article>
 
@@ -247,24 +263,8 @@ It is similar to OS thread but managed by Go runtime scheduler instead of OS ker
 With the great power of concurrency comes with the responsibility to handle synchronisation in the right manner.
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2023-12-01 11:17:04 +0800 +08'>December 1, 2023</span>&nbsp;·&nbsp;3 min</footer>
+  <footer class="entry-footer"><span title='2023-12-01 11:17:04 +0800 HKT'>December 1, 2023</span>&nbsp;·&nbsp;3 min</footer>
   <a class="entry-link" aria-label="post link to Common Go channel uses" href="http://localhost:1313/posts/go-channel/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Built-in functions in Go
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>The builtins are functions in Golang that you can call directly without having to import any package; they just come with the programming language itself.
-The full list resides in the builtin standard library: https://pkg.go.dev/builtin
-Many of the builtin functions are widely used, so it’s important to know them by heart.
-The motivation for this post comes from the fact that Go 1.21.0 has introduced multiple new handy builtins (which doesn’t happen frequently).
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-11-29 11:17:04 +0800 +08'>November 29, 2023</span>&nbsp;·&nbsp;5 min</footer>
-  <a class="entry-link" aria-label="post link to Built-in functions in Go" href="http://localhost:1313/posts/go-built-in/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

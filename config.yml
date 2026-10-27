@@ -20,11 +20,11 @@ params:
   homeInfoParams:
     Title: Hi there 👋, @whoami
     Content: |
-      * My name is Derek, I am a software developer at **Goldman Sachs**. I live in Singapore 🇸🇬 right now, and plan to relocate to Hong Kong 🇭🇰 soon
+      * My name is Derek, I am a software developer at **Goldman Sachs**. Just recently relocated to Hong Kong 🇭🇰 to continue my tech career after live in Singapore 🇸🇬 for the past 10+ years 
       
       * 
       
-      * My current project specialises in a Raft-based, API-driven **distributed scheduling platform** for batch workflows (think of Apache Airflow) 
+      * My current project specialises in a Raft-based, API-driven **distributed scheduling platform** for batch workflows (think of Apache Airflow equivalent but heavily optimised for throughput) 
        that takes care of around 40 million firmwide job executions daily
       
       *
